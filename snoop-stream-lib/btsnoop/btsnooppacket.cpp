@@ -22,12 +22,12 @@
  * THE SOFTWARE.
  */
 /**
-    btsnooppacket.cpp
+	btsnooppacket.cpp
 
-    Parse bt snoop packet record
+	Parse bt snoop packet record
 
-    @author Bertrand Martel
-    @version 0.1
+	@author Bertrand Martel
+	@version 0.1
 */
 #include "btsnooppacket.h"
 #include "iostream"
@@ -47,77 +47,77 @@ using namespace std;
  */
 BtSnoopPacket::BtSnoopPacket(char * data){
 
-    original_length=0;
-    included_length=0;
-    cumulative_drops=0;
-    packet_received=false;
-    packet_sent=false;
-    packet_type_command_event=false;
-    packet_type_data=false;
+	original_length=0;
+	included_length=0;
+	cumulative_drops=0;
+	packet_received=false;
+	packet_sent=false;
+	packet_type_command_event=false;
+	packet_type_data=false;
 
-    int packet_flags = 0;
+	int packet_flags = 0;
 
-    for (int i = 0;i<4;i++){
-        original_length+=((data[i] & 0xFF) << (3-(i-0))*8);
-    }
-    for (int i = 4;i<8;i++){
-        included_length+=((data[i] & 0xFF) << (3-(i-4))*8);
-    }
-    for (int i = 8;i<12;i++){
-        packet_flags+=   ((data[i] & 0xFF) << (3-(i-8))*8);
-    }
-    for (int i = 12;i<16;i++){
-        cumulative_drops+=((data[i] & 0xFF) << (3-(i-12))*8);
-    }
+	for (int i = 0;i<4;i++){
+		original_length+=((data[i] & 0xFF) << (3-(i-0))*8);
+	}
+	for (int i = 4;i<8;i++){
+		included_length+=((data[i] & 0xFF) << (3-(i-4))*8);
+	}
+	for (int i = 8;i<12;i++){
+		packet_flags+=   ((data[i] & 0xFF) << (3-(i-8))*8);
+	}
+	for (int i = 12;i<16;i++){
+		cumulative_drops+=((data[i] & 0xFF) << (3-(i-12))*8);
+	}
 
-    if ((packet_flags & 0x00000001)==1){
-        packet_received=true;
-    }
-    else{
-        packet_sent=true;
-    }
+	if ((packet_flags & 0x00000001)==1){
+		packet_received=true;
+	}
+	else{
+		packet_sent=true;
+	}
 
-    if ((packet_flags & 0x00000002)==1){
-        packet_type_command_event=true;
-    }
-    else{
-        packet_type_data=true;
-    }
+	if ((packet_flags & 0x00000002)==1){
+		packet_type_command_event=true;
+	}
+	else{
+		packet_type_data=true;
+	}
 
-    //this is timestamp in microseconds since 01/01/0 AD
-    uint64_t timestamp_ad=0;
+	//this is timestamp in microseconds since 01/01/0 AD
+	uint64_t timestamp_ad=0;
 
-    for (int i = 16;i<24;i++){
-        timestamp_ad+=(((uint64_t)(data[i] & 0xFF)) << (7-(i-16))*8);
-    }
+	for (int i = 16;i<24;i++){
+		timestamp_ad+=(((uint64_t)(data[i] & 0xFF)) << (7-(i-16))*8);
+	}
 
-    uint64_t date_between_record_date_year2000=timestamp_ad-DATE_0AD_TO_YEAR2000;
+	uint64_t date_between_record_date_year2000=timestamp_ad-DATE_0AD_TO_YEAR2000;
 
-    struct tm t;
-    t.tm_year = 100;
-    t.tm_mon = 0;
-    t.tm_mday = 1;
-    t.tm_hour = 0;
-    t.tm_min = 0;
-    t.tm_sec = 0;
-    t.tm_isdst=0;
+	struct tm t;
+	t.tm_year = 100;
+	t.tm_mon = 0;
+	t.tm_mday = 1;
+	t.tm_hour = 0;
+	t.tm_min = 0;
+	t.tm_sec = 0;
+	t.tm_isdst=0;
 
-    //save and set TZ beforme mktime
-    char *tz;
-    tz = getenv("TZ");
-    setenv("TZ", "", 1);
-    tzset();
+	//save and set TZ beforme mktime
+	char *tz;
+	tz = getenv("TZ");
+	setenv("TZ", "", 1);
+	tzset();
 
-    uint64_t timeSinceEpoch = (uint64_t)mktime(&t);
+	uint64_t timeSinceEpoch = (uint64_t)mktime(&t);
 
-    //set TZ to previous value
-    if (tz)
-        setenv("TZ", tz, 1);
-    else
-        unsetenv("TZ");
-    tzset();
+	//set TZ to previous value
+	if (tz)
+		setenv("TZ", tz, 1);
+	else
+		unsetenv("TZ");
+	tzset();
 
-    timestamp_microseconds=date_between_record_date_year2000+timeSinceEpoch*1000000;
+	timestamp_microseconds=date_between_record_date_year2000+timeSinceEpoch*1000000;
 }
 
 /**
@@ -126,21 +126,21 @@ BtSnoopPacket::BtSnoopPacket(char * data){
  */
 void BtSnoopPacket::printInfo(){
 
-    cout << "original length           : " << original_length << endl;
-    cout << "included length           : " << included_length << endl;
-    cout << "cumulative drops          : " << cumulative_drops << endl;
-    cout << "packet_received           : " << packet_received << endl;
-    cout << "packet_sent               : " << packet_sent << endl;
-    cout << "packet_type_command_event : " << packet_type_command_event << endl;
-    cout << "packet_type_data          : " << packet_type_data << endl;
-    cout << "timestamp unix microsec   : " << timestamp_microseconds << endl;
-    cout << "data                      : ";
+	cout << "original length           : " << original_length << endl;
+	cout << "included length           : " << included_length << endl;
+	cout << "cumulative drops          : " << cumulative_drops << endl;
+	cout << "packet_received           : " << packet_received << endl;
+	cout << "packet_sent               : " << packet_sent << endl;
+	cout << "packet_type_command_event : " << packet_type_command_event << endl;
+	cout << "packet_type_data          : " << packet_type_data << endl;
+	cout << "timestamp unix microsec   : " << timestamp_microseconds << endl;
+	cout << "data                      : ";
 
-    for (int i = 0; i  < included_length;i++){
-        printf("%02X ",(packet_data[i] & 0xFF));
-    }
-    cout << endl;
-    cout << "--------------------------" << endl;
+	for (int i = 0; i  < included_length;i++){
+		printf("%02X ",(packet_data[i] & 0xFF));
+	}
+	cout << endl;
+	cout << "--------------------------" << endl;
 }
 
 BtSnoopPacket::~BtSnoopPacket(){
@@ -153,9 +153,9 @@ BtSnoopPacket::~BtSnoopPacket(){
  */
 void BtSnoopPacket::decode_data(char * data){
 
-    for (int i = 0; i  < included_length;i++){
-        packet_data.push_back(data[i]);
-    }
+	for (int i = 0; i  < included_length;i++){
+		packet_data.push_back(data[i]);
+	}
 }
 
 /**
@@ -164,7 +164,7 @@ void BtSnoopPacket::decode_data(char * data){
  * @return
  */
 int BtSnoopPacket::getOriginalLength(){
-    return original_length;
+	return original_length;
 }
 
 /**
@@ -173,7 +173,7 @@ int BtSnoopPacket::getOriginalLength(){
  * @return
  */
 int BtSnoopPacket::getincludedLength(){
-    return included_length;
+	return included_length;
 }
 
 /**
@@ -182,7 +182,16 @@ int BtSnoopPacket::getincludedLength(){
  * @return
  */
 int BtSnoopPacket::getCumulativeDrops(){
-    return cumulative_drops;
+	return cumulative_drops;
+}
+
+/**
+ * @brief getPacketData
+ *       retrieve packet data
+ * @return
+ */
+std::vector<char> BtSnoopPacket::getPacketData(){
+	return packet_data;
 }
 
 /**
@@ -190,8 +199,8 @@ int BtSnoopPacket::getCumulativeDrops(){
  *      get unix timestamp for this packet record
  * @return
  */
-long BtSnoopPacket::getUnixTimestampMicroseconds(){
-    return timestamp_microseconds;
+uint64_t BtSnoopPacket::getUnixTimestampMicroseconds(){
+	return timestamp_microseconds;
 }
 
 /**
@@ -200,7 +209,7 @@ long BtSnoopPacket::getUnixTimestampMicroseconds(){
  * @return
  */
 bool BtSnoopPacket::is_packet_sent(){
-    return packet_sent;
+	return packet_sent;
 }
 
 /**
@@ -209,7 +218,7 @@ bool BtSnoopPacket::is_packet_sent(){
  * @return
  */
 bool BtSnoopPacket::is_packet_received(){
-    return packet_received;
+	return packet_received;
 }
 
 /**
@@ -218,7 +227,7 @@ bool BtSnoopPacket::is_packet_received(){
  * @return
  */
 bool BtSnoopPacket::is_data(){
-    return packet_type_data;
+	return packet_type_data;
 }
 
 /**
@@ -227,5 +236,5 @@ bool BtSnoopPacket::is_data(){
  * @return
  */
 bool BtSnoopPacket::is_command_event(){
-    return packet_type_command_event;
+	return packet_type_command_event;
 }

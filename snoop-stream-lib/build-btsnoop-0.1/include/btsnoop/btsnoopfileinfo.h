@@ -22,12 +22,12 @@
  * THE SOFTWARE.
  */
 /**
-    btsnoopfileinfo.h
+	btsnoopfileinfo.h
 
-    Parse bt snoop header
+	Parse bt snoop header
 
-    @author Bertrand Martel
-    @version 0.1
+	@author Bertrand Martel
+	@version 0.1
 */
 
 #ifndef BTSNOOPFILEINFO_H
@@ -42,77 +42,77 @@ class BtSnoopFileInfo
 
 public:
 
-    /**
-     * @brief FileHeader
-     *      build file header
-     * @param data
-     *      file header data of size 16 (16 octet => 8 + 4 + 4)
-     */
-    BtSnoopFileInfo(char* data);
+	/**
+	 * @brief FileHeader
+	 *      build file header
+	 * @param data
+	 *      file header data of size 16 (16 octet => 8 + 4 + 4)
+	 */
+	BtSnoopFileInfo(char* data);
 
-    BtSnoopFileInfo();
+	BtSnoopFileInfo();
 
-    ~BtSnoopFileInfo();
+	~BtSnoopFileInfo();
 
-    /**
-     * @brief getIdentificationNumber
-     *      get identification number
-     * @return
-     */
-    std::string getIdentificationNumber();
+	/**
+	 * @brief getIdentificationNumber
+	 *      get identification number
+	 * @return
+	 */
+	std::string getIdentificationNumber();
 
-    /**
-     * @brief getVersionNumber
-     *      get version number
-     * @return
-     */
-    int getVersionNumber();
+	/**
+	 * @brief getVersionNumber
+	 *      get version number
+	 * @return
+	 */
+	int getVersionNumber();
 
-    /**
-     * @brief getDatalinkNumber
-     *     get datalink enum
-     * @return
-     */
-    datalink_type getDatalinkNumber();
+	/**
+	 * @brief getDatalinkNumber
+	 *     get datalink enum
+	 * @return
+	 */
+	datalink_type getDatalinkNumber();
 
-    /**
-     * @brief getDatalinkStr
-     *      get datalink name string
-     * @return
-     */
-    std::string getDatalinkStr();
+	/**
+	 * @brief getDatalinkStr
+	 *      get datalink name string
+	 * @return
+	 */
+	std::string getDatalinkStr();
 
-    /**
-     * @brief printInfo
-     *      print info in debug mode
-     */
-    void printInfo();
+	/**
+	 * @brief printInfo
+	 *      print info in debug mode
+	 */
+	void printInfo();
 
 private:
 
-    /**
-     * @brief identification_pattern
-     *      used to identify the file as a snoop formatted file
-     */
-    std::string identification_number;
+	/**
+	 * @brief identification_pattern
+	 *      used to identify the file as a snoop formatted file
+	 */
+	std::string identification_number;
 
-    /**
-     * @brief version_number
-     *      version of snoop used
-     */
-    int version_number;
+	/**
+	 * @brief version_number
+	 *      version of snoop used
+	 */
+	int version_number;
 
-    /**
-     * @brief datalink_type
-     *      type of datalink layer used in this current file
-     */
-    datalink_type datalink;
+	/**
+	 * @brief datalink_type
+	 *      type of datalink layer used in this current file
+	 */
+	datalink_type datalink;
 
-    /**
-     * @brief datalakink_str
-     *      datalink type string
-     */
-    std::string datalakink_str;
+	/**
+	 * @brief datalakink_str
+	 *      datalink type string
+	 */
+	std::string datalakink_str;
 
 };
 

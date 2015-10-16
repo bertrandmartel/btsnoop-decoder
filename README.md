@@ -1,4 +1,4 @@
-# C++ BT Snoop File streaming decoder #
+# C++ Bluetooth Snoop File streaming decoder #
 
 
 <i>Last update 16/10/2015</i>
@@ -49,7 +49,6 @@ if (success){
 else{
 	//failure (bad reading / file not found)
 }
-
 ```
 
 <h4>Decode dynamic Bt snoop file</h4>
@@ -63,7 +62,6 @@ else{
 ..........
 
 BtSnoopParser parser;
-
 ```
 
 * Add a listner to monitor incoming packet data record with ``void BtSnoopParser::addSnoopListener(IBtSnoopListener* listener)``:
@@ -72,7 +70,6 @@ BtSnoopParser parser;
 BtSnoopMonitor monitor;
 
 parser.addSnoopListener(&monitor);
-
 ```
 
 * `BtSnoopMonitor` is a class inheriting IBtSnoopListener interface

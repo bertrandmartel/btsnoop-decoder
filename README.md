@@ -158,6 +158,7 @@ else{
 | ``is_packet_received()`` | ``bool`` |  define if packet record is received      |
 | ``is_data()`` | ``bool`` |  define if packet record is data record      |
 | ``is_command_event()`` | ``bool`` |  define if packet record is command or event    |
+| ``getPacketData()`` | ``std::vector<char>`` |  get packet data records    |
 
 <b>Examples</b>
 

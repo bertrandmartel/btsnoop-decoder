@@ -22,12 +22,12 @@
  * THE SOFTWARE.
  */
 /**
-    btsnooppacket.h
+	btsnooppacket.h
 
-    Parse bt snoop packet record
+	Parse bt snoop packet record
 
-    @author Bertrand Martel
-    @version 0.1
+	@author Bertrand Martel
+	@version 0.1
 */
 
 #ifndef BTSNOOPPACKET_H
@@ -41,144 +41,151 @@ class BtSnoopPacket
 
 public:
 
-    /**
-     * @brief BtSnoopPacket
-     *      build snoop packet
-     * @param data
-     *      data of size 24 (4 + 4 + 4 + 4 + 8)
-     */
-    BtSnoopPacket(char * data);
+	/**
+	 * @brief BtSnoopPacket
+	 *      build snoop packet
+	 * @param data
+	 *      data of size 24 (4 + 4 + 4 + 4 + 8)
+	 */
+	BtSnoopPacket(char * data);
 
-    ~BtSnoopPacket();
+	~BtSnoopPacket();
 
-    /**
-     * @brief decode_data
-     *      decode packet data field
-     * @param data
-     */
-    void decode_data(char * data);
+	/**
+	 * @brief decode_data
+	 *      decode packet data field
+	 * @param data
+	 */
+	void decode_data(char * data);
 
-    /**
-     * @brief getOriginalLength
-     *      get length of original packet (could be more than this packet's length)
-     * @return
-     */
-    int getOriginalLength();
+	/**
+	 * @brief getOriginalLength
+	 *      get length of original packet (could be more than this packet's length)
+	 * @return
+	 */
+	int getOriginalLength();
 
-    /**
-     * @brief getincludedLength
-     *      get packet data field length
-     * @return
-     */
-    int getincludedLength();
+	/**
+	 * @brief getincludedLength
+	 *      get packet data field length
+	 * @return
+	 */
+	int getincludedLength();
 
-    /**
-     * @brief getCumulativeDrops
-     *      get number of packet lost between the first record and this record for this file
-     * @return
-     */
-    int getCumulativeDrops();
+	/**
+	 * @brief getCumulativeDrops
+	 *      get number of packet lost between the first record and this record for this file
+	 * @return
+	 */
+	int getCumulativeDrops();
 
-    /**
-     * @brief getUnixTimestampMicroseconds
-     *      get unix timestamp for this packet record
-     * @return
-     */
-    uint64_t getUnixTimestampMicroseconds();
+	/**
+	 * @brief getUnixTimestampMicroseconds
+	 *      get unix timestamp for this packet record
+	 * @return
+	 */
+	uint64_t getUnixTimestampMicroseconds();
 
-    /**
-     * @brief is_packet_sent
-     *      define if packet record is sent
-     * @return
-     */
-    bool is_packet_sent();
+	/**
+	 * @brief is_packet_sent
+	 *      define if packet record is sent
+	 * @return
+	 */
+	bool is_packet_sent();
 
-    /**
-     * @brief is_packet_received
-     *      define if packet record is received
-     * @return
-     */
-    bool is_packet_received();
+	/**
+	 * @brief is_packet_received
+	 *      define if packet record is received
+	 * @return
+	 */
+	bool is_packet_received();
 
-    /**
-     * @brief is_data
-     *      define if packet record is data record
-     * @return
-     */
-    bool is_data();
+	/**
+	 * @brief is_data
+	 *      define if packet record is data record
+	 * @return
+	 */
+	bool is_data();
 
-    /**
-     * @brief is_command_event
-     *      define if packet record is command or event
-     * @return
-     */
-    bool is_command_event();
+	/**
+	 * @brief is_command_event
+	 *      define if packet record is command or event
+	 * @return
+	 */
+	bool is_command_event();
 
-    /**
-     * @brief printInfo
-     *      print info in debug mode
-     */
-    void printInfo();
+	/**
+	* @brief getPacketData
+	*      retrieve packet data
+	* @return
+	*/
+	std::vector<char> getPacketData();
+
+	/**
+	 * @brief printInfo
+	 *      print info in debug mode
+	 */
+	void printInfo();
 
 private:
 
-    /**
-     * @brief original_length
-     *      length of original packet (could be more than this packet's length)
-     */
-    int original_length;
+	/**
+	 * @brief original_length
+	 *      length of original packet (could be more than this packet's length)
+	 */
+	int original_length;
 
-    /**
-     * @brief included_length
-     *      packet data field length
-     */
-    int included_length;
+	/**
+	 * @brief included_length
+	 *      packet data field length
+	 */
+	int included_length;
 
-    /**
-     * @brief cumulative_drops
-     *      number of packet lost between the first record and this record for this file
-     */
-    int cumulative_drops;
+	/**
+	 * @brief cumulative_drops
+	 *      number of packet lost between the first record and this record for this file
+	 */
+	int cumulative_drops;
 
-    /**
-     * @brief timestamp_seconds
-     *      unix timestamp for this packet record
-     */
-    uint64_t timestamp_microseconds;
+	/**
+	 * @brief timestamp_seconds
+	 *      unix timestamp for this packet record
+	 */
+	uint64_t timestamp_microseconds;
 
-    /**
-     * @brief packet_data
-     *      packet data
-     */
-    std::vector<char> packet_data;
+	/**
+	 * @brief packet_data
+	 *      packet data
+	 */
+	std::vector<char> packet_data;
 
-    /**
-     * @brief packet_sent
-     *      define if packet record is sent
-     * @return
-     */
-    bool packet_sent;
+	/**
+	 * @brief packet_sent
+	 *      define if packet record is sent
+	 * @return
+	 */
+	bool packet_sent;
 
-    /**
-     * @brief packet_received
-     *      define if packet record is received
-     * @return
-     */
-    bool packet_received;
+	/**
+	 * @brief packet_received
+	 *      define if packet record is received
+	 * @return
+	 */
+	bool packet_received;
 
-    /**
-     * @brief packet_type_data
-     *      define if packet record is data record
-     * @return
-     */
-    bool packet_type_data;
+	/**
+	 * @brief packet_type_data
+	 *      define if packet record is data record
+	 * @return
+	 */
+	bool packet_type_data;
 
-    /**
-     * @brief packet_type_command_event
-     *      define if packet record is command or event
-     * @return
-     */
-    bool packet_type_command_event;
+	/**
+	 * @brief packet_type_command_event
+	 *      define if packet record is command or event
+	 * @return
+	 */
+	bool packet_type_command_event;
 
 };
 

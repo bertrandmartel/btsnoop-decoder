@@ -1,7 +1,7 @@
 # C++ Bluetooth Snoop File streaming decoder #
 
 
-<i>Last update 16/10/2015</i>
+<i>Last update 22/11/2015</i>
 
 Small library to decode Bluetooth Snoop file used to store radio packet records.
 
@@ -162,7 +162,7 @@ else{
 
 <b>Examples</b>
 
-[From test project in main.cpp](https://github.com/akinaru/btsnoop-stream-decoder/blob/master/snoop-stream-test/main.cpp)
+[From test project in main.cpp](https://github.com/akinaru/btsnoop-decoder/blob/master/snoop-stream-test/main.cpp)
 
 <hr/>
 

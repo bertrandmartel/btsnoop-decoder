@@ -36,7 +36,10 @@
 using namespace std;
 
 BtSnoopFileInfo::BtSnoopFileInfo(){
-
+	version_number = 0;
+	datalink = UNKNOWN;
+	datalakink_str = "";
+	identification_number = "";
 }
 
 /**

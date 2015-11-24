@@ -17,4 +17,6 @@ LOCAL_SRC_FILES := $(BTSNOOP_DECODER_PATH)/btsnoopfileinfo.cpp \
 	$(BTSNOOP_DECODER_PATH)/btsnoopparser.cpp \
 	$(BTSNOOP_DECODER_PATH)/btsnooptask.cpp
 
+LOCAL_LDLIBS := -llog
+
 include $(BUILD_SHARED_LIBRARY)

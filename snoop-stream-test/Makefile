@@ -3,7 +3,7 @@ CC = g++
 CC_FLAGS = -w -g
 
 VERSION=0.1
-RELEASE_DIR=build-btsnoop-$(VERSION)
+RELEASE_DIR=build-btsnoop
 
 # File names
 EXEC = snoop-test

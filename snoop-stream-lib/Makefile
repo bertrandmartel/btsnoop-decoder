@@ -8,7 +8,7 @@ VERSION=0.1
 EXEC = snoop-test
 SOURCES = $(wildcard btsnoop/*.cpp *.cpp)
 OBJECTS = $(SOURCES:.cpp=.o)
-RELEASE_DIR=build-btsnoop-$(VERSION)
+RELEASE_DIR=build-btsnoop
 
 # Main target
 libbtsnoop.a: $(OBJECTS)

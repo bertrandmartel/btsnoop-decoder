@@ -22,12 +22,12 @@
  * THE SOFTWARE.
  */
 /**
-    btsnoopfileinfo.cpp
+	btsnoopfileinfo.cpp
 
-    Parse bt snoop header
+	Parse bt snoop header
 
-    @author Bertrand Martel
-    @version 0.1
+	@author Bertrand Martel
+	@version 0.1
 */
 
 #include "btsnoopfileinfo.h"
@@ -50,82 +50,82 @@ BtSnoopFileInfo::BtSnoopFileInfo(){
  */
 BtSnoopFileInfo::BtSnoopFileInfo(char* data){
 
-    identification_number=std::string(data,data+8);
+	identification_number=std::string(data,data+8);
 
-    version_number=0;
+	version_number=0;
 
-    for (int i = 8;i<12;i++){
-        version_number+=((data[i] & 0xFF) << (3-(i-8))*8);
-    }
+	for (int i = 8;i<12;i++){
+		version_number+=((data[i] & 0xFF) << (3-(i-8))*8);
+	}
 
-    unsigned int datalink_num = 0;
+	unsigned int datalink_num = 0;
 
-    datalink=UNKNOWN;
-    datalakink_str="";
+	datalink=UNKNOWN;
+	datalakink_str="";
 
-    for (int i = 12;i<16;i++){
-        datalink_num+=((data[i] & 0xFF) << ((3-(i-12)))*8);
-    }
+	for (int i = 12;i<16;i++){
+		datalink_num+=((data[i] & 0xFF) << ((3-(i-12)))*8);
+	}
 
-    switch (datalink_num){
+	switch (datalink_num){
 
-        case IEEE_802_3:
-            datalink=IEEE_802_3;
-            datalakink_str="IEEE_802_3";
-            break;
-        case IEEE_802_4_TOKEN_BUS:
-            datalink=IEEE_802_4_TOKEN_BUS;
-            datalakink_str="IEEE_802_4_TOKEN_BUS";
-            break;
-        case IEEE_802_5_TOKEN_RING:
-            datalink=IEEE_802_5_TOKEN_RING;
-            datalakink_str="IEEE_802_5_TOKEN_RING";
-            break;
-        case IEEE_802_6_METRO_NET:
-            datalink=IEEE_802_6_METRO_NET;
-            datalakink_str="IEEE_802_6_METRO_NET";
-            break;
-        case ETHERNET:
-            datalink=ETHERNET;
-            datalakink_str="ETHERNET";
-            break;
-        case HDLC:
-            datalink=HDLC;
-            datalakink_str="HDLC";
-            break;
-        case CHARACTER_SYNCHRONOUS:
-            datalink=CHARACTER_SYNCHRONOUS;
-            datalakink_str="CHARACTER_SYNCHRONOUS";
-            break;
-        case IBM_CHANNEL_TO_CHANNEL:
-            datalink=IBM_CHANNEL_TO_CHANNEL;
-            datalakink_str="IBM_CHANNEL_TO_CHANNEL";
-            break;
-        case FDDI:
-            datalink=FDDI;
-            datalakink_str="FDDI";
-            break;
-        case OTHER:
-            datalink=OTHER;
-            datalakink_str="OTHER";
-            break;
-        case HCI_UN_ENCAPSULATED:
-            datalink=HCI_UN_ENCAPSULATED;
-            datalakink_str="HCI_UN_ENCAPSULATED";
-            break;
-        case HCI_UART:
-            datalink=HCI_UART;
-            datalakink_str="HCI_UART";
-            break;
-        case HCI_BSCP:
-            datalink=HCI_BSCP;
-            datalakink_str="HCI_BSCP";
-            break;
-        case HCI_SERIAL:
-            datalink=HCI_SERIAL;
-            datalakink_str="HCI_SERIAL";
-            break;
-    }
+		case IEEE_802_3:
+			datalink=IEEE_802_3;
+			datalakink_str="IEEE_802_3";
+			break;
+		case IEEE_802_4_TOKEN_BUS:
+			datalink=IEEE_802_4_TOKEN_BUS;
+			datalakink_str="IEEE_802_4_TOKEN_BUS";
+			break;
+		case IEEE_802_5_TOKEN_RING:
+			datalink=IEEE_802_5_TOKEN_RING;
+			datalakink_str="IEEE_802_5_TOKEN_RING";
+			break;
+		case IEEE_802_6_METRO_NET:
+			datalink=IEEE_802_6_METRO_NET;
+			datalakink_str="IEEE_802_6_METRO_NET";
+			break;
+		case ETHERNET:
+			datalink=ETHERNET;
+			datalakink_str="ETHERNET";
+			break;
+		case HDLC:
+			datalink=HDLC;
+			datalakink_str="HDLC";
+			break;
+		case CHARACTER_SYNCHRONOUS:
+			datalink=CHARACTER_SYNCHRONOUS;
+			datalakink_str="CHARACTER_SYNCHRONOUS";
+			break;
+		case IBM_CHANNEL_TO_CHANNEL:
+			datalink=IBM_CHANNEL_TO_CHANNEL;
+			datalakink_str="IBM_CHANNEL_TO_CHANNEL";
+			break;
+		case FDDI:
+			datalink=FDDI;
+			datalakink_str="FDDI";
+			break;
+		case OTHER:
+			datalink=OTHER;
+			datalakink_str="OTHER";
+			break;
+		case HCI_UN_ENCAPSULATED:
+			datalink=HCI_UN_ENCAPSULATED;
+			datalakink_str="HCI_UN_ENCAPSULATED";
+			break;
+		case HCI_UART:
+			datalink=HCI_UART;
+			datalakink_str="HCI_UART";
+			break;
+		case HCI_BSCP:
+			datalink=HCI_BSCP;
+			datalakink_str="HCI_BSCP";
+			break;
+		case HCI_SERIAL:
+			datalink=HCI_SERIAL;
+			datalakink_str="HCI_SERIAL";
+			break;
+	}
 
 }
 
@@ -135,9 +135,9 @@ BtSnoopFileInfo::BtSnoopFileInfo(char* data){
  */
 void BtSnoopFileInfo::printInfo(){
 
-    cout << "version                   : " << version_number << endl;
-    cout << "datalink                  : " << datalakink_str << endl;
-    cout << "identification num        : " << identification_number<< endl;
+	cout << "version                   : " << version_number << endl;
+	cout << "datalink                  : " << datalakink_str << endl;
+	cout << "identification num        : " << identification_number<< endl;
 
 }
 
@@ -150,7 +150,7 @@ BtSnoopFileInfo::~BtSnoopFileInfo(){
  * @return
  */
 std::string BtSnoopFileInfo::getIdentificationNumber(){
-    return identification_number;
+	return identification_number;
 }
 
 /**
@@ -159,7 +159,7 @@ std::string BtSnoopFileInfo::getIdentificationNumber(){
  * @return
  */
 int BtSnoopFileInfo::getVersionNumber(){
-    return version_number;
+	return version_number;
 }
 
 /**
@@ -168,7 +168,7 @@ int BtSnoopFileInfo::getVersionNumber(){
  * @return
  */
 datalink_type BtSnoopFileInfo::getDatalinkNumber(){
-    return datalink;
+	return datalink;
 }
 
 /**
@@ -177,5 +177,5 @@ datalink_type BtSnoopFileInfo::getDatalinkNumber(){
  * @return
  */
 std::string BtSnoopFileInfo::getDatalinkStr(){
-    return datalakink_str;
+	return datalakink_str;
 }

@@ -22,12 +22,12 @@
  * THE SOFTWARE.
  */
 /**
-    btsnoopstate.h
+	btsnoopstate.h
 
-    list of state for parsing snoop file
+	list of state for parsing snoop file
 
-    @author Bertrand Martel
-    @version 0.1
+	@author Bertrand Martel
+	@version 0.1
 */
 
 #ifndef BTSNOOPSTATE_H
@@ -35,8 +35,8 @@
 
 enum snoop_state{
 
-    FILE_HEADER,
-    PACKET_RECORD
+	FILE_HEADER,
+	PACKET_RECORD
 
 };
 

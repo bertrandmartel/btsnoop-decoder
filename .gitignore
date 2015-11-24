@@ -1,1 +1,3 @@
 *.o
+snoop-stream-lib/build-btsnoop
+snoop-stream-test/snoop-test

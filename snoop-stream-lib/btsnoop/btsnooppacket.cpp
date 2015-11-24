@@ -35,6 +35,12 @@
 #include <inttypes.h>
 #include <stdlib.h>
 
+#ifdef __ANDROID__
+
+#include "android/log.h"
+
+#endif
+
 #define DATE_0AD_TO_YEAR2000 0x00E03AB44A676000
 
 using namespace std;
@@ -126,6 +132,19 @@ BtSnoopPacket::BtSnoopPacket(char * data){
  */
 void BtSnoopPacket::printInfo(){
 
+	#ifdef __ANDROID__
+
+	__android_log_print(ANDROID_LOG_VERBOSE,"snoop packet","original length           : %d\n",original_length);
+	__android_log_print(ANDROID_LOG_VERBOSE,"snoop packet","included length           : %d\n",included_length);
+	__android_log_print(ANDROID_LOG_VERBOSE,"snoop packet","cumulative drops          : %d\n",cumulative_drops);
+	__android_log_print(ANDROID_LOG_VERBOSE,"snoop packet","packet_received           : %d\n",packet_received );
+	__android_log_print(ANDROID_LOG_VERBOSE,"snoop packet","packet_sent               : %d\n",packet_sent);
+	__android_log_print(ANDROID_LOG_VERBOSE,"snoop packet","packet_type_command_event : %d\n",packet_type_command_event );
+	__android_log_print(ANDROID_LOG_VERBOSE,"snoop packet","packet_type_data          : %d\n",packet_type_data);
+	__android_log_print(ANDROID_LOG_VERBOSE,"snoop packet","--------------------------\n");
+
+	#else
+
 	cout << "original length           : " << original_length << endl;
 	cout << "included length           : " << included_length << endl;
 	cout << "cumulative drops          : " << cumulative_drops << endl;
@@ -141,6 +160,8 @@ void BtSnoopPacket::printInfo(){
 	}
 	cout << endl;
 	cout << "--------------------------" << endl;
+
+	#endif
 }
 
 BtSnoopPacket::~BtSnoopPacket(){

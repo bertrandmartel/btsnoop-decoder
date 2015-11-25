@@ -36,6 +36,12 @@
 #include "btsnooppacket.h"
 #include "iostream"
 
+#ifdef __ANDROID__
+
+#include "android/log.h"
+
+#endif
+
 using namespace std;
 
 /**
@@ -102,7 +108,7 @@ void * BtSnoopTask::decoding_task(void) {
 
 	struct timespec tim, tim2;
 	tim.tv_sec = 0;
-	tim.tv_nsec = 1000000L * 500;
+	tim.tv_nsec = 1000000L * 200;
 
 	int index = 0;
 
@@ -117,19 +123,26 @@ void * BtSnoopTask::decoding_task(void) {
 			while (fileStream.tellg()!=-1){
 
 				if (!fileStream.eof()){
-
 					index = decode_file(&fileStream,index);
-
 				}
 			}
 		}
 		else{
+
+			#ifdef __ANDROID__
+
+			__android_log_print(ANDROID_LOG_VERBOSE,"snoop decoder","file could not be opened");
+
+			#else
+
+			cout << "file could not be opened" << endl;
+			
+			#endif // __ANDROID__
+
 			return 0;
 		}
 		nanosleep(&tim, &tim2);
 	}
-
-	cout << "decoding task ENDED" << endl;
 
 	return 0;
 }
@@ -168,7 +181,6 @@ int BtSnoopTask::decode_file(ifstream *fileStream,int current_position) {
 		}
 		case PACKET_RECORD:
 		{
-
 			while (fileStream->tellg()!=-1){
 
 				current_position = fileStream->tellg();
@@ -192,7 +204,7 @@ int BtSnoopTask::decode_file(ifstream *fileStream,int current_position) {
 					for (unsigned int i = 0; i  < snoopListenerList->size();i++){
 						snoopListenerList->at(i)->onSnoopPacketReceived(fileInfo,packet);
 					}
-					packetDataRecords.push_back(packet);
+					//packetDataRecords.push_back(packet);
 				}
 
 				delete[] packet_header;
@@ -277,7 +289,6 @@ bool BtSnoopTask::decode_file() {
 
 						packetDataRecords.push_back(packet);
 					}
-
 					delete[] packet_header;
 				}
 			}

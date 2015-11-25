@@ -12,7 +12,7 @@ Note : this library doesnt decode HCI Bluetooth data, only snoop-like format
 
 <hr/>
 
-<h4>Build</h4>
+##Build
 
 ```
 cd snoop-stream-lib
@@ -22,9 +22,8 @@ make
 
 Library release is under `build-btsnoop-X.X` directory.
 
-<hr/>
 
-<h4>Decode non-dynamic Bt snoop file</h4>
+##Decode non-dynamic Bt snoop file
 
 To decode one single bt snoop file with no streaming support, use BtSnoopTask with method :
 
@@ -51,7 +50,7 @@ else{
 }
 ```
 
-<h4>Decode dynamic Bt snoop file</h4>
+##Decode dynamic Bt snoop file
 
 * To decode in streaming mode a bt snoop file, use ``BtSnoopParser`` :
 
@@ -127,7 +126,7 @@ else{
 
 * You can block file monitoring process with ``void BtSnoopParser::join();`` method
 
-<h4>Datamodel description</h4>
+##Datamodel description
 
 
 * ``BtSnoopTask`` description :
@@ -160,20 +159,37 @@ else{
 | ``is_command_event()`` | ``bool`` |  define if packet record is command or event    |
 | ``getPacketData()`` | ``std::vector<char>`` |  get packet data records    |
 
-<b>Examples</b>
+##Android integration
+
+An Android Makefile is provided for easy Android integration. Simply add the git repository as a submodule in your `jni` directory :
+
+```
+git submodule add https://github.com/akinaru/btsnoop-decoder.git <yourproject/src/main/jni/btsnoop-decoder>
+```
+
+In you `Application.mk` add gnustl support :
+
+```
+APP_STL := gnustl_static 
+```
+
+If you dont use Android NDK rc10 change `Android.mk` std include with your own path in you android-ndk source :
+
+```
+LOCAL_C_INCLUDES := $NDK/sources/cxx-stl/gnu-libstdc++/4.8/include
+```
+
+##Examples
 
 [From test project in main.cpp](https://github.com/akinaru/btsnoop-decoder/blob/master/snoop-stream-test/main.cpp)
 
-<hr/>
 
-<b>Memory checking</b>
-
-Project is memcheck free
+##Memory checking
 
 ``
 valgrind --tool=memcheck --leak-check=full ./snoop-test
 ``
 
-<b>Specifications</b>
+##Specifications
 
 snoop format V2 : https://tools.ietf.org/html/rfc1761

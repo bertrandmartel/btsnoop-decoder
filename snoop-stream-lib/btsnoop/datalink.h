@@ -22,12 +22,12 @@
  * THE SOFTWARE.
  */
 /**
-    datalink.h
+	datalink.h
 
-    list of datalink types
+	list of datalink types
 
-    @author Bertrand Martel
-    @version 0.1
+	@author Bertrand Martel
+	@version 0.1
 */
 
 #ifndef DATALINK_TYPE_H
@@ -37,25 +37,25 @@
 
 enum datalink_type{
 
-    UNKNOWN=-1,
+	UNKNOWN=-1,
 
-    //for regular snoop file
-    IEEE_802_3 = 0,
-    IEEE_802_4_TOKEN_BUS = 1,
-    IEEE_802_5_TOKEN_RING = 2,
-    IEEE_802_6_METRO_NET = 3,
-    ETHERNET = 4,
-    HDLC = 5,
-    CHARACTER_SYNCHRONOUS = 6,
-    IBM_CHANNEL_TO_CHANNEL = 7,
-    FDDI = 8,
-    OTHER = 9,
+	//for regular snoop file
+	IEEE_802_3 = 0,
+	IEEE_802_4_TOKEN_BUS = 1,
+	IEEE_802_5_TOKEN_RING = 2,
+	IEEE_802_6_METRO_NET = 3,
+	ETHERNET = 4,
+	HDLC = 5,
+	CHARACTER_SYNCHRONOUS = 6,
+	IBM_CHANNEL_TO_CHANNEL = 7,
+	FDDI = 8,
+	OTHER = 9,
 
-    //for btsnoop file
-    HCI_UN_ENCAPSULATED = 1001,
-    HCI_UART = 1002,
-    HCI_BSCP = 1003,
-    HCI_SERIAL = 1004
+	//for btsnoop file
+	HCI_UN_ENCAPSULATED = 1001,
+	HCI_UART = 1002,
+	HCI_BSCP = 1003,
+	HCI_SERIAL = 1004
 };
 
 #endif // DATALINK_TYPE_H

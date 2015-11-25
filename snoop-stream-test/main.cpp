@@ -61,6 +61,7 @@ int main(int argc, char *argv[])
 
 	std::string recordFile("/home/abathur/Bureau/open_source/snoop-stream-decoder/snoop-files/btsnoop_hci.log");
 
+	/*
 	BtSnoopTask decoder(recordFile);
 
 	bool decode_status = decoder.decode_file();
@@ -68,12 +69,14 @@ int main(int argc, char *argv[])
 	decoder.getFileInfo().printInfo();
 
 	cout << decoder.getPacketDataRecords().size() << endl;
-	
+	*/
+
+	/*
 	for (int i = 0; i  < decoder.getPacketDataRecords().size();i++){
 		decoder.getPacketDataRecords()[i].printInfo();
 	}
+	*/
 
-	/*
 	BtSnoopParser parser;
 
 	BtSnoopMonitor monitor;
@@ -86,6 +89,7 @@ int main(int argc, char *argv[])
 	if (!success)
 		cerr << "file reading error occured" << endl;
 
+	/*
 	//waiting 2s
 	usleep(2000000);
 
@@ -94,9 +98,10 @@ int main(int argc, char *argv[])
 
 	//waiting 2s
 	usleep(2000000);
+	*/
 
 	//wait indefinitly
 	parser.join();
-	*/
+	
 	return 0;
 }

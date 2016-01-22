@@ -41,6 +41,8 @@ class BtSnoopPacket
 
 public:
 
+	BtSnoopPacket();
+	
 	/**
 	 * @brief BtSnoopPacket
 	 *      build snoop packet

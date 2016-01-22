@@ -118,14 +118,16 @@ void * BtSnoopTask::decoding_task(void) {
 
 		if (fileStream.is_open()) {
 
+			fileStream.seekg (0, fileStream.end);
+			int length = fileStream.tellg();
+
 			fileStream.seekg(index,ios::beg);
 
-			while (fileStream.tellg()!=-1){
+			if (!fileStream.eof() && fileStream.tellg()!=-1 && length!=index){
 
-				if (!fileStream.eof()){
-					index = decode_file(&fileStream,index);
-				}
+				index = decode_streaming_file(&fileStream,index);
 			}
+
 		}
 		else{
 
@@ -157,7 +159,7 @@ void * BtSnoopTask::decoding_task(void) {
  * @return
  *      new position of file (to match with incoming changes)
  */
-int BtSnoopTask::decode_file(ifstream *fileStream,int current_position) {
+int BtSnoopTask::decode_streaming_file(ifstream *fileStream,int current_position) {
 
 	switch(state){
 
@@ -171,43 +173,152 @@ int BtSnoopTask::decode_file(ifstream *fileStream,int current_position) {
 
 			delete[] file_header;
 
-			if (fileStream->tellg()!=-1) {
-				state=PACKET_RECORD;
-			}
-			else{
-				return current_position;
-			}
-			break;
+			current_position = fileStream->tellg();
+
+			packet_record_state = 0;
+
+			state=PACKET_RECORD;
+			
 		}
 		case PACKET_RECORD:
 		{
-			while (fileStream->tellg()!=-1){
+			fileStream->seekg (0, fileStream->end);
+			int length = fileStream->tellg();
+			fileStream->seekg(current_position,ios::beg);
 
-				current_position = fileStream->tellg();
+			while ((fileStream->tellg() != -1) && (length != fileStream->tellg())) {
 
-				char * packet_header = new char[24];
+				if ((packet_record_state == 1) || (packet_record_state == 0)){
 
-				fileStream->read(packet_header, 24);
+					current_position = fileStream->tellg();
 
-				if (fileStream->tellg()!=-1){
+					if (packet_record_state == 0){
 
-					BtSnoopPacket packet(packet_header);
+						#ifdef __ANDROID__
+						//__android_log_print(ANDROID_LOG_VERBOSE,"snoop decoder","[1] position : %d\n",fileStream->tellg());
+						#else
+						//cout << "[1] position : " << fileStream->tellg() << endl;
+						#endif
 
-					char * packet_data = new char[packet.getincludedLength()];
+						packet_header = new char[24];
+						header_index = 0;
 
-					fileStream->read(packet_data, packet.getincludedLength());
-
-					packet.decode_data(packet_data);
-
-					delete[] packet_data;
-
-					for (unsigned int i = 0; i  < snoopListenerList->size();i++){
-						snoopListenerList->at(i)->onSnoopPacketReceived(fileInfo,packet);
+						packet_record_state = 1;
 					}
-					//packetDataRecords.push_back(packet);
+
+					for (unsigned int i = header_index; i< 24;i++){
+
+						current_position = fileStream->tellg();
+
+						fileStream->seekg (0, fileStream->end);
+						length = fileStream->tellg();
+						fileStream->seekg(current_position,ios::beg);
+
+						if ((fileStream->tellg() != -1) && (length != fileStream->tellg())){
+
+							packet_header[header_index] = fileStream->get();
+							header_index++;
+
+							#ifdef __ANDROID__
+							//__android_log_print(ANDROID_LOG_VERBOSE,"snoop decoder","[2] position : %d\n",fileStream->tellg());
+							#else
+							//cout << "[2] position : " << fileStream->tellg() << endl;
+							#endif
+						}
+						else{
+
+							if (fileStream->tellg() != -1)
+								current_position = fileStream->tellg();
+
+							break;
+						}
+					}
+
+					//cout << "header_index : " << header_index << " sur 24" << endl;
+						
+					if (header_index == 24){
+						packet_record_state = 2;
+					}
+
+					#ifdef __ANDROID__
+					//__android_log_print(ANDROID_LOG_VERBOSE,"snoop decoder","[3] position : %d\n",fileStream->tellg());
+					#else
+					//cout << "[3] position : " << fileStream->tellg() << endl;
+					#endif
+
 				}
 
-				delete[] packet_header;
+				if ((packet_record_state == 2) || (packet_record_state == 3))
+				{
+
+					if (packet_record_state == 2){
+
+						#ifdef __ANDROID__
+						//__android_log_print(ANDROID_LOG_VERBOSE,"snoop decoder","[4] position : %d\n",fileStream->tellg());
+						#else
+						//cout << "[4] position : " << fileStream->tellg() << endl;
+						#endif
+
+						packet = BtSnoopPacket(packet_header);
+						delete[] packet_header;
+
+						packet_data = new char[packet.getincludedLength()];
+						data_index = 0;
+
+						packet_record_state = 3;
+					}
+
+					for (unsigned int i = data_index; i< packet.getincludedLength();i++){
+
+						current_position = fileStream->tellg();
+
+						fileStream->seekg (0, fileStream->end);
+						length = fileStream->tellg();
+						fileStream->seekg(current_position,ios::beg);
+
+						if ((fileStream->tellg() != -1) && (length != fileStream->tellg())){
+
+							packet_data[data_index] = fileStream->get();
+							data_index++;
+
+							#ifdef __ANDROID__
+							//__android_log_print(ANDROID_LOG_VERBOSE,"snoop decoder","[5] position : %d\n",fileStream->tellg());
+							#else
+							//cout << "[5] position : " << fileStream->tellg() << endl;
+							#endif
+						}
+						else{
+
+							if (fileStream->tellg() != -1)
+								current_position = fileStream->tellg();
+							break;
+						}
+					}
+
+					if (fileStream->tellg() != -1)
+								current_position = fileStream->tellg();
+
+					//cout << "data index : " << data_index << " - packet length : " << packet.getincludedLength() << endl;
+
+					if (data_index == packet.getincludedLength()){
+
+						packet_record_state = 0;
+
+						#ifdef __ANDROID__
+						//__android_log_print(ANDROID_LOG_VERBOSE,"snoop decoder","[6] position : %d\n",fileStream->tellg());
+						#else
+						//cout << "[6] position : " << fileStream->tellg() << endl;
+						#endif
+
+						packet.decode_data(packet_data);
+
+						delete[] packet_data;
+
+						for (unsigned int i = 0; i  < snoopListenerList->size();i++){
+							snoopListenerList->at(i)->onSnoopPacketReceived(fileInfo,packet);
+						}
+					}
+				}
 			}
 		}
 	}

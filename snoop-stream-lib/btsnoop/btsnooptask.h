@@ -46,7 +46,7 @@ public:
 
 	void * decoding_task(void);
 
-	int decode_file(std::ifstream *fileStream,int current_position);
+	int decode_streaming_file(std::ifstream *fileStream,int current_position);
 
 	bool decode_file();
 
@@ -76,6 +76,23 @@ private:
 
 	std::vector<BtSnoopPacket> packetDataRecords;
 
+	/* packet header value (24 o)*/
+	char * packet_header;
+
+	/* packet header index count */
+	int header_index;
+
+	/* packet data value (dynamic size)*/
+	char * packet_data;
+
+	/* packet data index count*/
+	int data_index;
+
+	/* current packet*/
+	BtSnoopPacket packet;
+
+	/* state for packet record streaming*/
+	int packet_record_state;
 };
 
 #endif // BTSNOOPTASK_H

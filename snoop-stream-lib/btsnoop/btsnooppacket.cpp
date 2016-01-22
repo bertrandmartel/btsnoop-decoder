@@ -45,6 +45,9 @@
 
 using namespace std;
 
+BtSnoopPacket::BtSnoopPacket(){
+}
+
 /**
  * @brief SnoopPacket
  *      build snoop packet

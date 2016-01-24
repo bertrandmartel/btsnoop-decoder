@@ -20,7 +20,7 @@ libbtsnoop.a: $(OBJECTS)
 
 # To obtain object files
 %.o: %.cpp
-	$(CC) -I./btsnoop -I. -c $(CC_FLAGS) $< -o $@
+	$(CC) -I./btsnoop -I. -I../external_libs/include -c $(CC_FLAGS) $< -o $@
 
 # To remove generated files
 clean:

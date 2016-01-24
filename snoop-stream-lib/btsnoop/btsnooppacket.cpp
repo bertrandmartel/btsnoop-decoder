@@ -34,6 +34,7 @@
 #include "stdio.h"
 #include <inttypes.h>
 #include <stdlib.h>
+#include <json/json.h>
 
 #ifdef __ANDROID__
 
@@ -166,6 +167,37 @@ void BtSnoopPacket::printInfo(){
 
 	#endif
 }
+
+std::string BtSnoopPacket::toJson(bool beautify){
+
+	Json::Value output;
+
+	output["original_length"] = original_length;
+	output["included_length"] = included_length;
+	output["cumulative_drops"] = cumulative_drops;
+	output["packet_received"] = packet_received;
+	output["packet_sent"] = packet_sent;
+	output["packet_type_command_event"] = packet_type_command_event;
+	output["packet_type_data"] = packet_type_data;
+	output["timestamp_microseconds"] = timestamp_microseconds;
+
+	Json::Value packet_data_vals(Json::arrayValue);
+	for (unsigned int i = 0; i  < included_length;i++){
+		packet_data_vals.append((packet_data[i] & 0xFF));
+	}
+	output["packet_data"]=packet_data_vals;
+
+	if (!beautify){
+		Json::StreamWriterBuilder builder;
+		builder.settings_["indentation"] = "";
+		return Json::writeString(builder, output);
+	}
+	else{
+		return output.toStyledString();
+	}
+}
+
+
 
 BtSnoopPacket::~BtSnoopPacket(){
 }

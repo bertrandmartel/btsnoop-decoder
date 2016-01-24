@@ -34,6 +34,7 @@
 #define BTSNOOPPACKET_H
 
 #include "vector"
+#include "string"
 #include <inttypes.h>
 
 class BtSnoopPacket
@@ -128,6 +129,12 @@ public:
 	 *      print info in debug mode
 	 */
 	void printInfo();
+
+	/**
+	 * @brief toJson
+	 *      convert packet to json
+	 */
+	std::string toJson(bool beautify);
 
 private:
 

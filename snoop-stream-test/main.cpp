@@ -59,7 +59,7 @@ int main(int argc, char *argv[])
 
 	sigaction(SIGINT, &sigIntHandler, NULL);
 
-	std::string recordFile("/home/abathur/Bureau/open_source/snoop-stream-decoder/snoop-files/btsnoop_hci.log");
+	std::string recordFile("/home/abathur/btsnoop_hci.log");
 
 	/*
 	BtSnoopTask decoder(recordFile);

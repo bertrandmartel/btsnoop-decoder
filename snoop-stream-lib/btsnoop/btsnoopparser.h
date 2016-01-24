@@ -79,6 +79,12 @@ public:
 	 */
 	void join();
 
+	/**
+	 * @brief stop
+	 *      stop and join current thread
+	 */
+	void stop();
+
 private:
 
 	/**

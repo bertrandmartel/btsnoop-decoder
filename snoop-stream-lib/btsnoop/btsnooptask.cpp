@@ -39,8 +39,13 @@
 #ifdef __ANDROID__
 
 #include "android/log.h"
+#include "jni.h"
 
-#endif
+JavaVM*   BtSnoopTask::jvm=0;
+jobject   BtSnoopTask::jobj;
+jmethodID BtSnoopTask::mid;
+
+#endif // __ANDROID__
 
 using namespace std;
 
@@ -49,6 +54,9 @@ using namespace std;
  *
  */
 BtSnoopTask::BtSnoopTask(){
+	#ifdef __ANDROID__
+	jni_env=0;
+	#endif //__ANDROID__
 }
 
 /**
@@ -103,6 +111,35 @@ void BtSnoopTask::stop(){
  */
 void * BtSnoopTask::decoding_task(void) {
 
+	#ifdef __ANDROID__
+
+	if (BtSnoopTask::jvm!=0){
+
+		int getEnvStat = BtSnoopTask::jvm->GetEnv((void **)&jni_env, JNI_VERSION_1_6);
+
+		if (getEnvStat == JNI_EDETACHED) {
+
+			__android_log_print(ANDROID_LOG_ERROR,"snoop decoder","jvm not attached\n");
+
+			if (BtSnoopTask::jvm->AttachCurrentThread(&jni_env, NULL) != 0) {
+
+				__android_log_print(ANDROID_LOG_ERROR,"snoop decoder","failed to attach\n");
+			}
+		} else if (getEnvStat == JNI_EVERSION) {
+
+			__android_log_print(ANDROID_LOG_ERROR,"snoop decoder","jni: version not supported\n");
+
+		}
+	}
+	else{
+		__android_log_print(ANDROID_LOG_ERROR,"snoop decoder","jvm not defined\n");
+	}
+
+	#endif // __ANDROID__
+
+	int count=0;
+	int count2=0;
+
 	packetDataRecords.clear();
 	task_control=true;
 
@@ -125,26 +162,33 @@ void * BtSnoopTask::decoding_task(void) {
 
 			if (!fileStream.eof() && fileStream.tellg()!=-1 && length!=index){
 
-				index = decode_streaming_file(&fileStream,index);
+				index = decode_streaming_file(&fileStream,index,&count,&count2);
 			}
 
 		}
 		else{
 
 			#ifdef __ANDROID__
-
 			__android_log_print(ANDROID_LOG_VERBOSE,"snoop decoder","file could not be opened");
-
 			#else
-
 			cout << "file could not be opened" << endl;
-			
 			#endif // __ANDROID__
 
 			return 0;
 		}
 		nanosleep(&tim, &tim2);
 	}
+
+	#ifdef __ANDROID__
+
+	if (BtSnoopTask::jvm!=0){
+		BtSnoopTask::jvm->DetachCurrentThread();
+	}
+	else{
+		__android_log_print(ANDROID_LOG_ERROR,"snoop decoder","jvm not defined\n");
+	}
+
+	#endif // __ANDROID__
 
 	return 0;
 }
@@ -159,7 +203,7 @@ void * BtSnoopTask::decoding_task(void) {
  * @return
  *      new position of file (to match with incoming changes)
  */
-int BtSnoopTask::decode_streaming_file(ifstream *fileStream,int current_position) {
+int BtSnoopTask::decode_streaming_file(ifstream *fileStream,int current_position,int *count,int *count2) {
 
 	switch(state){
 
@@ -194,11 +238,13 @@ int BtSnoopTask::decode_streaming_file(ifstream *fileStream,int current_position
 
 					if (packet_record_state == 0){
 
+						/*
 						#ifdef __ANDROID__
-						//__android_log_print(ANDROID_LOG_VERBOSE,"snoop decoder","[1] position : %d\n",fileStream->tellg());
+						__android_log_print(ANDROID_LOG_VERBOSE,"snoop decoder","[1] position : %d\n",fileStream->tellg());
 						#else
-						//cout << "[1] position : " << fileStream->tellg() << endl;
-						#endif
+						cout << "[1] position : " << fileStream->tellg() << endl;
+						#endif //__ANDROID__
+						*/
 
 						packet_header = new char[24];
 						header_index = 0;
@@ -219,11 +265,13 @@ int BtSnoopTask::decode_streaming_file(ifstream *fileStream,int current_position
 							packet_header[header_index] = fileStream->get();
 							header_index++;
 
+							/*
 							#ifdef __ANDROID__
-							//__android_log_print(ANDROID_LOG_VERBOSE,"snoop decoder","[2] position : %d\n",fileStream->tellg());
+							__android_log_print(ANDROID_LOG_VERBOSE,"snoop decoder","[2] position : %d\n",fileStream->tellg());
 							#else
-							//cout << "[2] position : " << fileStream->tellg() << endl;
-							#endif
+							cout << "[2] position : " << fileStream->tellg() << endl;
+							#endif //__ANDROID__
+							*/
 						}
 						else{
 
@@ -240,12 +288,13 @@ int BtSnoopTask::decode_streaming_file(ifstream *fileStream,int current_position
 						packet_record_state = 2;
 					}
 
+					/*
 					#ifdef __ANDROID__
-					//__android_log_print(ANDROID_LOG_VERBOSE,"snoop decoder","[3] position : %d\n",fileStream->tellg());
+					__android_log_print(ANDROID_LOG_VERBOSE,"snoop decoder","[3] position : %d\n",fileStream->tellg());
 					#else
-					//cout << "[3] position : " << fileStream->tellg() << endl;
-					#endif
-
+					cout << "[3] position : " << fileStream->tellg() << endl;
+					#endif //__ANDROID__
+					*/
 				}
 
 				if ((packet_record_state == 2) || (packet_record_state == 3))
@@ -253,11 +302,13 @@ int BtSnoopTask::decode_streaming_file(ifstream *fileStream,int current_position
 
 					if (packet_record_state == 2){
 
+						/*
 						#ifdef __ANDROID__
-						//__android_log_print(ANDROID_LOG_VERBOSE,"snoop decoder","[4] position : %d\n",fileStream->tellg());
+						__android_log_print(ANDROID_LOG_VERBOSE,"snoop decoder","[4] position : %d\n",fileStream->tellg());
 						#else
-						//cout << "[4] position : " << fileStream->tellg() << endl;
-						#endif
+						cout << "[4] position : " << fileStream->tellg() << endl;
+						#endif //__ANDROID__
+						*/
 
 						packet = BtSnoopPacket(packet_header);
 						delete[] packet_header;
@@ -281,11 +332,13 @@ int BtSnoopTask::decode_streaming_file(ifstream *fileStream,int current_position
 							packet_data[data_index] = fileStream->get();
 							data_index++;
 
+							/*
 							#ifdef __ANDROID__
-							//__android_log_print(ANDROID_LOG_VERBOSE,"snoop decoder","[5] position : %d\n",fileStream->tellg());
+							__android_log_print(ANDROID_LOG_VERBOSE,"snoop decoder","[5] position : %d\n",fileStream->tellg());
 							#else
-							//cout << "[5] position : " << fileStream->tellg() << endl;
-							#endif
+							cout << "[5] position : " << fileStream->tellg() << endl;
+							#endif //__ANDROID__
+							*/
 						}
 						else{
 
@@ -304,18 +357,24 @@ int BtSnoopTask::decode_streaming_file(ifstream *fileStream,int current_position
 
 						packet_record_state = 0;
 
+						/*
 						#ifdef __ANDROID__
-						//__android_log_print(ANDROID_LOG_VERBOSE,"snoop decoder","[6] position : %d\n",fileStream->tellg());
+						__android_log_print(ANDROID_LOG_VERBOSE,"snoop decoder","[6] position : %d\n",fileStream->tellg());
 						#else
-						//cout << "[6] position : " << fileStream->tellg() << endl;
-						#endif
+						cout << "[6] position : " << fileStream->tellg() << endl;
+						#endif //__ANDROID__
+						*/
 
 						packet.decode_data(packet_data);
 
 						delete[] packet_data;
 
 						for (unsigned int i = 0; i  < snoopListenerList->size();i++){
-							snoopListenerList->at(i)->onSnoopPacketReceived(fileInfo,packet);
+							#ifdef __ANDROID__
+							(*snoopListenerList)[i]->onSnoopPacketReceived(fileInfo,packet,jni_env);
+							#else
+							(*snoopListenerList)[i]->onSnoopPacketReceived(fileInfo,packet);
+							#endif //__ANDROID__
 						}
 					}
 				}
@@ -394,7 +453,11 @@ bool BtSnoopTask::decode_file() {
 						if (snoopListenerList!=0){
 
 							for (unsigned int i = 0; i  < snoopListenerList->size();i++){
+								#ifdef __ANDROID__
+								snoopListenerList->at(i)->onSnoopPacketReceived(fileInfo,packet,jni_env);
+								#else
 								snoopListenerList->at(i)->onSnoopPacketReceived(fileInfo,packet);
+								#endif //__ANDROID__
 							}
 						}
 

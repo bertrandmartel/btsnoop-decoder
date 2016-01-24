@@ -36,10 +36,29 @@
 #include "btsnooppacket.h"
 #include "btsnoopfileinfo.h"
 
+#ifdef __ANDROID__
+#include "jni.h"
+#endif //__ANDROID__
+
 class IBtSnoopListener
 {
 
 public:
+
+	#ifdef __ANDROID__
+	/**
+	 * @brief onSnoopPacketReceived
+	 *      called when a new packet record has been received
+	 * @param fileInfo
+	 *      file info object
+	 * @param packet
+	 *      snoop packet record object
+	 * @param jni_env
+	 *      JNI env object
+	 */
+	virtual void onSnoopPacketReceived(BtSnoopFileInfo fileInfo,BtSnoopPacket packet,JNIEnv * jni_env) = 0;
+
+	#else
 
 	/**
 	 * @brief onSnoopPacketReceived
@@ -51,6 +70,7 @@ public:
 	 */
 	virtual void onSnoopPacketReceived(BtSnoopFileInfo fileInfo,BtSnoopPacket packet) = 0;
 
+	#endif //__ANDROID__
 };
 
 #endif // IBTSNOOPLISTENER_H

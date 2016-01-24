@@ -81,6 +81,16 @@ void BtSnoopParser::join(){
 }
 
 /**
+ * @brief join
+ *      wait for thread to finish (blocking method)
+ */
+void BtSnoopParser::stop(){
+
+	snoop_task.stop();
+	join();
+}
+
+/**
  * @brief decode_streaming_file
  *      decode streaming file (non blocking method)
  * @param file_path

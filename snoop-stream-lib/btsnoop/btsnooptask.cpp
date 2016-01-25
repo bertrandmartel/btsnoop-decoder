@@ -119,7 +119,7 @@ void * BtSnoopTask::decoding_task(void) {
 
 		if (getEnvStat == JNI_EDETACHED) {
 
-			__android_log_print(ANDROID_LOG_ERROR,"snoop decoder","jvm not attached\n");
+			__android_log_print(ANDROID_LOG_INFO,"snoop decoder","jvm not attached\n");
 
 			if (BtSnoopTask::jvm->AttachCurrentThread(&jni_env, NULL) != 0) {
 

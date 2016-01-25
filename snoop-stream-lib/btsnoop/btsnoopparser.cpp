@@ -71,6 +71,14 @@ void BtSnoopParser::addSnoopListener(IBtSnoopListener* listener){
 }
 
 /**
+ * @brief snoopListenerList
+ *      remove all listeners in snoop listener list
+ */
+void BtSnoopParser::clearListeners(){
+	snoopListenerList.clear();
+}
+
+/**
  * @brief join
  *      wait for thread to finish (blocking method)
  */

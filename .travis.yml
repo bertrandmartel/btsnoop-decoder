@@ -12,6 +12,8 @@ addons:
     sources:
     - ubuntu-toolchain-r-test
     packages:
+    - linux-libc-dev
+    - linux-libc-dev:i386
     - gcc-4.8-multilib
     - g++-4.8-multilib
     - gcc-4.8

@@ -4,13 +4,13 @@ project(btsnoop-decoder)
 
 set(LIBRARY_OUTPUT_PATH lib/${CMAKE_BUILD_TYPE})
 
-include_directories(include)
+include_directories(headers)
 
 file(
         GLOB_RECURSE
         source_files
-        src/*
-        include/*
+        cpp/*
+        headers/*
 )
 
 add_library(

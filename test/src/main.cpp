@@ -51,6 +51,11 @@ void catch_signint(int sig){
 
 int main(int argc, char *argv[])
 {
+	if (argc <= 1){
+		cerr << "you must provide btsnoop file path " << endl;
+		return -1;
+	}
+
 	struct sigaction sigIntHandler;
 
 	sigIntHandler.sa_handler = catch_signint;
@@ -59,7 +64,7 @@ int main(int argc, char *argv[])
 
 	sigaction(SIGINT, &sigIntHandler, NULL);
 
-	std::string recordFile("/home/abathur/Bureau/open_source/snoop-stream-decoder/snoop-files/btsnoop_hci.log");
+	std::string recordFile(argv[1]);
 
 	/*
 	BtSnoopTask decoder(recordFile);

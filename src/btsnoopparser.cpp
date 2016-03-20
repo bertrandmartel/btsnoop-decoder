@@ -30,11 +30,11 @@
 	@version 0.1
 */
 
-#include "btsnoopparser.h"
+#include "btsnoop/btsnoopparser.h"
 #include "iostream"
-#include "ibtsnooplistener.h"
+#include "btsnoop/ibtsnooplistener.h"
 #include <pthread.h>
-#include "btsnooptask.h"
+#include "btsnoop/btsnooptask.h"
 
 using namespace std;
 

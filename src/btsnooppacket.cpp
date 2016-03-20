@@ -29,7 +29,7 @@
 	@author Bertrand Martel
 	@version 0.1
 */
-#include "btsnooppacket.h"
+#include "btsnoop/btsnooppacket.h"
 #include "iostream"
 #include "stdio.h"
 #include <inttypes.h>

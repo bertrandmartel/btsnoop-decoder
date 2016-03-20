@@ -30,7 +30,7 @@
 	@version 0.1
 */
 
-#include "btsnoopfileinfo.h"
+#include "btsnoop/btsnoopfileinfo.h"
 #include "iostream"
 
 using namespace std;

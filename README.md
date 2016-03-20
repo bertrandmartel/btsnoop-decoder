@@ -13,6 +13,10 @@ Note : this library doesnt decode HCI Bluetooth data, only snoop-like format
 
 <a href="CHANGELOG.md">ChangeLogs can be found here</a>
 
+## Documentation
+
+http://akinaru.github.io/btsnoop-decoder
+
 ## Build library
 
 ```

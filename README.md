@@ -1,7 +1,6 @@
 # C++ Bluetooth Snoop File streaming decoder #
 
 [![Build Status](https://travis-ci.org/akinaru/btsnoop-decoder.svg?branch=master)](https://travis-ci.org/akinaru/btsnoop-decoder)
-[![License](http://img.shields.io/:license-mit-blue.svg)](LICENSE.md)
 
 Small library to decode Bluetooth Snoop file used to store radio packet records.
 

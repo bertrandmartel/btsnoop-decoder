@@ -14,7 +14,13 @@ file(
 )
 
 add_library(
-        btsnoop
+        btsnoop_static
         STATIC
+        ${source_files}
+)
+
+add_library(
+        btsnoop
+        SHARED
         ${source_files}
 )

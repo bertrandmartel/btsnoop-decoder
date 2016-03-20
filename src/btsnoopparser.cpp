@@ -39,7 +39,7 @@
 using namespace std;
 
 /**
- * @brief BtSnoopParser
+ * @brief
  *      initialize bt snoop file parser
  */
 BtSnoopParser::BtSnoopParser() {
@@ -49,7 +49,8 @@ BtSnoopParser::BtSnoopParser() {
 }
 
 /**
- * stop and join thread
+ * @brief
+ * 		stop and join thread
  **/
 BtSnoopParser::~BtSnoopParser(){
 
@@ -60,7 +61,7 @@ BtSnoopParser::~BtSnoopParser(){
 }
 
 /**
- * @brief addSnoopListener
+ * @brief
  *      add a listener to monitor streamed packet record
  * @param listener
  */
@@ -71,7 +72,7 @@ void BtSnoopParser::addSnoopListener(IBtSnoopListener* listener){
 }
 
 /**
- * @brief snoopListenerList
+ * @brief
  *      remove all listeners in snoop listener list
  */
 void BtSnoopParser::clearListeners(){
@@ -79,7 +80,7 @@ void BtSnoopParser::clearListeners(){
 }
 
 /**
- * @brief join
+ * @brief
  *      wait for thread to finish (blocking method)
  */
 void BtSnoopParser::join(){
@@ -89,7 +90,7 @@ void BtSnoopParser::join(){
 }
 
 /**
- * @brief join
+ * @brief
  *      wait for thread to finish (blocking method)
  */
 void BtSnoopParser::stop(){
@@ -99,9 +100,10 @@ void BtSnoopParser::stop(){
 }
 
 /**
- * @brief decode_streaming_file
+ * @brief
  *      decode streaming file (non blocking method)
  * @param file_path
+ *      btsnoop file path
  * @return
  *      success status
  */
@@ -112,7 +114,6 @@ bool BtSnoopParser::decode_streaming_file(std::string file_path){
 	if (thread_started)
 		(void)pthread_join(decode_task,NULL);
 
-	//snoop_task.~BtSnoopTask();
 	snoop_task= BtSnoopTask(file_path,&snoopListenerList);
 
 	int rc = pthread_create(&decode_task, NULL,&BtSnoopTask::decoding_helper,(void*)&snoop_task);

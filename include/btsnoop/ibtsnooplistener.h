@@ -47,7 +47,7 @@ public:
 
 	#ifdef __ANDROID__
 	/**
-	 * @brief onSnoopPacketReceived
+	 * @brief
 	 *      called when a new packet record has been received
 	 * @param fileInfo
 	 *      file info object
@@ -61,7 +61,7 @@ public:
 	#else
 
 	/**
-	 * @brief onSnoopPacketReceived
+	 * @brief
 	 *      called when a new packet record has been received
 	 * @param fileInfo
 	 *      file info object

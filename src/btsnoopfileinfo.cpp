@@ -43,7 +43,7 @@ BtSnoopFileInfo::BtSnoopFileInfo(){
 }
 
 /**
- * @brief FileHeader
+ * @brief
  *      build file header
  * @param data
  *      file header data of size 16 (16 octet => 8 + 4 + 4)
@@ -130,7 +130,7 @@ BtSnoopFileInfo::BtSnoopFileInfo(char* data){
 }
 
 /**
- * @brief printInfo
+ * @brief
  *      print info in debug mode
  */
 void BtSnoopFileInfo::printInfo(){
@@ -145,7 +145,7 @@ BtSnoopFileInfo::~BtSnoopFileInfo(){
 }
 
 /**
- * @brief getIdentificationNumber
+ * @brief
  *      get identification number
  * @return
  */
@@ -154,7 +154,7 @@ std::string BtSnoopFileInfo::getIdentificationNumber(){
 }
 
 /**
- * @brief getVersionNumber
+ * @brief
  *      get version number
  * @return
  */
@@ -163,7 +163,7 @@ int BtSnoopFileInfo::getVersionNumber(){
 }
 
 /**
- * @brief getDatalinkNumber
+ * @brief
  *     get datalink enum
  * @return
  */
@@ -172,7 +172,7 @@ datalink_type BtSnoopFileInfo::getDatalinkNumber(){
 }
 
 /**
- * @brief getDatalinkStr
+ * @brief
  *      get datalink name string
  * @return
  */

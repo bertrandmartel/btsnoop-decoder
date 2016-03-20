@@ -50,7 +50,7 @@ BtSnoopPacket::BtSnoopPacket(){
 }
 
 /**
- * @brief SnoopPacket
+ * @brief
  *      build snoop packet
  * @param data
  *      data of size 24 (4 + 4 + 4 + 4 + 8)
@@ -131,7 +131,7 @@ BtSnoopPacket::BtSnoopPacket(char * data){
 }
 
 /**
- * @brief printInfo
+ * @brief
  *      print info in debug mode
  */
 void BtSnoopPacket::printInfo(){
@@ -168,6 +168,11 @@ void BtSnoopPacket::printInfo(){
 	#endif
 }
 
+/**
+ * @brief
+ *      convert packet class to json
+ * @param beautify beautify/uglify json
+ */
 std::string BtSnoopPacket::toJson(bool beautify){
 
 	Json::Value output;
@@ -197,13 +202,11 @@ std::string BtSnoopPacket::toJson(bool beautify){
 	}
 }
 
-
-
 BtSnoopPacket::~BtSnoopPacket(){
 }
 
 /**
- * @brief decode_data
+ * @brief
  *      decode packet data field
  * @param data
  */
@@ -215,7 +218,7 @@ void BtSnoopPacket::decode_data(char * data){
 }
 
 /**
- * @brief getOriginalLength
+ * @brief
  *      get length of original packet (could be more than this packet's length)
  * @return
  */
@@ -224,7 +227,7 @@ int BtSnoopPacket::getOriginalLength(){
 }
 
 /**
- * @brief getincludedLength
+ * @brief
  *      get packet data field length
  * @return
  */
@@ -233,7 +236,7 @@ int BtSnoopPacket::getincludedLength(){
 }
 
 /**
- * @brief getCumulativeDrops
+ * @brief
  *      get number of packet lost between the first record and this record for this file
  * @return
  */
@@ -242,7 +245,7 @@ int BtSnoopPacket::getCumulativeDrops(){
 }
 
 /**
- * @brief getPacketData
+ * @brief
  *       retrieve packet data
  * @return
  */
@@ -251,7 +254,7 @@ std::vector<char> BtSnoopPacket::getPacketData(){
 }
 
 /**
- * @brief getUnixTimestampMicroseconds
+ * @brief
  *      get unix timestamp for this packet record
  * @return
  */
@@ -260,7 +263,7 @@ uint64_t BtSnoopPacket::getUnixTimestampMicroseconds(){
 }
 
 /**
- * @brief is_packet_sent
+ * @brief
  *      define if packet record is sent
  * @return
  */
@@ -269,7 +272,7 @@ bool BtSnoopPacket::is_packet_sent(){
 }
 
 /**
- * @brief is_packet_received
+ * @brief
  *      define if packet record is received
  * @return
  */
@@ -278,7 +281,7 @@ bool BtSnoopPacket::is_packet_received(){
 }
 
 /**
- * @brief is_data
+ * @brief
  *      define if packet record is data record
  * @return
  */
@@ -287,7 +290,7 @@ bool BtSnoopPacket::is_data(){
 }
 
 /**
- * @brief is_command_event
+ * @brief
  *      define if packet record is command or event
  * @return
  */

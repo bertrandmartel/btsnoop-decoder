@@ -7,15 +7,13 @@ LOCAL_CPPFLAGS += -fexceptions
 
 LOCAL_MODULE := btsnoopdecoder
 
-BTSNOOP_DECODER_PATH := snoop-stream-lib/btsnoop
-
 LOCAL_C_INCLUDES := $NDK/sources/cxx-stl/gnu-libstdc++/4.8/include
-LOCAL_C_INCLUDES += $(LOCAL_PATH)/$(BTSNOOP_DECODER_PATH)/..
+LOCAL_C_INCLUDES += $(LOCAL_PATH)/include
 
-LOCAL_SRC_FILES := $(BTSNOOP_DECODER_PATH)/btsnoopfileinfo.cpp \
-	$(BTSNOOP_DECODER_PATH)/btsnooppacket.cpp \
-	$(BTSNOOP_DECODER_PATH)/btsnoopparser.cpp \
-	$(BTSNOOP_DECODER_PATH)/btsnooptask.cpp
+LOCAL_SRC_FILES := src/btsnoopfileinfo.cpp \
+	src/btsnooppacket.cpp \
+	src/btsnoopparser.cpp \
+	src/btsnooptask.cpp
 
 LOCAL_LDLIBS := -llog
 

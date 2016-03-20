@@ -30,10 +30,10 @@
 	@version 0.1
 */
 
-#include "btsnooptask.h"
+#include "btsnoop/btsnooptask.h"
 #include <fstream>
-#include "btsnoopfileinfo.h"
-#include "btsnooppacket.h"
+#include "btsnoop/btsnoopfileinfo.h"
+#include "btsnoop/btsnooppacket.h"
 #include "iostream"
 
 #ifdef __ANDROID__

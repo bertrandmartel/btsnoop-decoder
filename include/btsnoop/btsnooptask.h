@@ -31,6 +31,10 @@
 #include "btsnoop/btsnooppacket.h"
 #include "ibtsnooplistener.h"
 
+#ifdef __ANDROID__
+#include "jni.h"
+#endif //__ANDROID__
+
 class BtSnoopTask
 {
 
@@ -46,7 +50,7 @@ public:
 
 	void * decoding_task(void);
 
-	int decode_file(std::ifstream *fileStream,int current_position);
+	int decode_streaming_file(std::ifstream *fileStream,int current_position,int *count,int *count2);
 
 	bool decode_file();
 
@@ -59,6 +63,12 @@ public:
 	static void *decoding_helper(void *context) {
 		return ((BtSnoopTask *)context)->decoding_task();
 	}
+
+	#ifdef __ANDROID__
+	static JavaVM* jvm;
+	static jobject jobj;
+	static jmethodID mid;
+	#endif // __ANDROID__
 
 private:
 
@@ -76,6 +86,28 @@ private:
 
 	std::vector<BtSnoopPacket> packetDataRecords;
 
+	/* packet header value (24 o)*/
+	char * packet_header;
+
+	/* packet header index count */
+	int header_index;
+
+	/* packet data value (dynamic size)*/
+	char * packet_data;
+
+	/* packet data index count*/
+	int data_index;
+
+	/* current packet*/
+	BtSnoopPacket packet;
+
+	/* state for packet record streaming*/
+	int packet_record_state;
+
+	#ifdef __ANDROID__
+	/*local reference to jni_env attached to JVM*/
+	JNIEnv * jni_env;
+	#endif // __ANDROID__
 };
 
 #endif // BTSNOOPTASK_H

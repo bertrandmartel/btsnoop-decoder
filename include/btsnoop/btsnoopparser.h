@@ -65,6 +65,12 @@ public:
 	void addSnoopListener(IBtSnoopListener* listener);
 
 	/**
+	 * @brief snoopListenerList
+	 *      remove all listeners in snoop listener list
+	 */
+	 void clearListeners();
+
+	/**
 	 * @brief decode_streaming_file
 	 *      decode streaming file (non blocking method)
 	 * @param file_path
@@ -78,6 +84,12 @@ public:
 	 *      wait for thread to finish (blocking method)
 	 */
 	void join();
+
+	/**
+	 * @brief stop
+	 *      stop and join current thread
+	 */
+	void stop();
 
 private:
 

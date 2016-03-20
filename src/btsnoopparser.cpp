@@ -71,6 +71,14 @@ void BtSnoopParser::addSnoopListener(IBtSnoopListener* listener){
 }
 
 /**
+ * @brief snoopListenerList
+ *      remove all listeners in snoop listener list
+ */
+void BtSnoopParser::clearListeners(){
+	snoopListenerList.clear();
+}
+
+/**
  * @brief join
  *      wait for thread to finish (blocking method)
  */
@@ -78,6 +86,16 @@ void BtSnoopParser::join(){
 
 	if (thread_started)
 		(void)pthread_join(decode_task,NULL);
+}
+
+/**
+ * @brief join
+ *      wait for thread to finish (blocking method)
+ */
+void BtSnoopParser::stop(){
+
+	snoop_task.stop();
+	join();
 }
 
 /**

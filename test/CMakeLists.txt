@@ -5,18 +5,18 @@ project(btsnoop-test)
 set(EXECUTABLE_OUTPUT_PATH bin/${CMAKE_BUILD_TYPE})
 
 include_directories(
-		../btsnoop/headers
-		headers
+		../include
+		include
 )
 
-link_directories(../btsnoop/lib/${CMAKE_BUILD_TYPE})
+link_directories(../lib/${CMAKE_BUILD_TYPE})
 
 
 file(
         GLOB_RECURSE
         source_files
-        cpp/*
-        headers/*
+        src/*
+        include/*
 )
 
 add_executable(

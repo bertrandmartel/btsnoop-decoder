@@ -56,5 +56,6 @@ void BtSnoopMonitor::onSnoopPacketReceived(BtSnoopFileInfo fileInfo,BtSnoopPacke
 
 	//fileheader.printInfo();
 	packet.printInfo();
+	cout << packet.toJson(true) << endl;
 	cout << "_________________________" << endl;
 }

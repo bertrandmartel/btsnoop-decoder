@@ -4,14 +4,14 @@
 [![Download](https://api.bintray.com/packages/akinaru/generic/btsnoop-decoder/images/download.svg) ](https://bintray.com/akinaru/generic/btsnoop-decoder/_latestVersion)
 [![License](http://img.shields.io/:license-mit-blue.svg)](LICENSE.md)
 
-Small library to decode Bluetooth Snoop file used to store radio packet records.
+Small library to decode Bluetooth Snoop file used to store radio packet records
 
 * streaming enabled : incoming packet data can be decoded over the fly for the same snoop file
 * non-blocking or blocking process (thread task running) 
 
 Note : this library doesnt decode HCI Bluetooth data, only snoop-like format
 
-<hr/>
+<a href="CHANGELOG.md">ChangeLogs can be found here</a>
 
 ## Build library
 

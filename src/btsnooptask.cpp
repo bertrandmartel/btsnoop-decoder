@@ -72,7 +72,7 @@ BtSnoopTask::BtSnoopTask(std::string file_path){
 }
 
 /**
- * @brief BtSnoopTask::BtSnoopTask
+ * @brief
  *          build a BtSnoopTask object with file path and a list of listener (for standalone streaming task)
  * @param file_path
  *      snoop file path
@@ -89,7 +89,7 @@ BtSnoopTask::BtSnoopTask(std::string file_path,std::vector<IBtSnoopListener*> *s
 }
 
 /**
- * @brief BtSnoopTask::~BtSnoopTask
+ * @brief
  *      exit control loop
  */
 BtSnoopTask::~BtSnoopTask(){
@@ -97,7 +97,7 @@ BtSnoopTask::~BtSnoopTask(){
 }
 
 /**
- * @brief BtSnoopTask::stop
+ * @brief
  *      stop decoding : exit control loop
  */
 void BtSnoopTask::stop(){
@@ -105,7 +105,7 @@ void BtSnoopTask::stop(){
 }
 
 /**
- * @brief BtSnoopTask::decoding_task
+ * @brief
  *      streaming decoding / monitoring snoop file for changes
  * @return
  */
@@ -137,9 +137,6 @@ void * BtSnoopTask::decoding_task(void) {
 
 	#endif // __ANDROID__
 
-	int count=0;
-	int count2=0;
-
 	packetDataRecords.clear();
 	task_control=true;
 
@@ -162,7 +159,7 @@ void * BtSnoopTask::decoding_task(void) {
 
 			if (!fileStream.eof() && fileStream.tellg()!=-1 && length!=index){
 
-				index = decode_streaming_file(&fileStream,index,&count,&count2);
+				index = decode_streaming_file(&fileStream,index);
 			}
 
 		}
@@ -194,7 +191,7 @@ void * BtSnoopTask::decoding_task(void) {
 }
 
 /**
- * @brief BtSnoopTask::decode_file
+ * @brief
  *      decode full snoop file header / packet record data
  * @param fileStream
  *      file
@@ -203,7 +200,7 @@ void * BtSnoopTask::decoding_task(void) {
  * @return
  *      new position of file (to match with incoming changes)
  */
-int BtSnoopTask::decode_streaming_file(ifstream *fileStream,int current_position,int *count,int *count2) {
+int BtSnoopTask::decode_streaming_file(ifstream *fileStream,int current_position) {
 
 	switch(state){
 
@@ -385,23 +382,31 @@ int BtSnoopTask::decode_streaming_file(ifstream *fileStream,int current_position
 	return current_position;
 }
 
+/**
+ * @brief
+ *      get file information header object
+ * @return
+ *      file information
+ */
 BtSnoopFileInfo BtSnoopTask::getFileInfo(){
 	return fileInfo;
 }
 
+/**
+ * @brief
+ *      get list of decoded packet
+ * @return
+ *      list of btsnoop decoded packets
+ */
 std::vector<BtSnoopPacket> BtSnoopTask::getPacketDataRecords(){
 	return packetDataRecords;
 }
 
 /**
- * @brief BtSnoopTask::decode_file
+ * @brief
  *      decode full snoop file header / packet record data
- * @param fileStream
- *      file
- * @param current_position
- *      current position of file (initial is 0 / cant be -1)
  * @return
- *      new position of file (to match with incoming changes)
+ *      success status
  */
 bool BtSnoopTask::decode_file() {
 

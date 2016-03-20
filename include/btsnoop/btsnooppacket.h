@@ -45,7 +45,7 @@ public:
 	BtSnoopPacket();
 	
 	/**
-	 * @brief BtSnoopPacket
+	 * @brief
 	 *      build snoop packet
 	 * @param data
 	 *      data of size 24 (4 + 4 + 4 + 4 + 8)
@@ -55,83 +55,83 @@ public:
 	~BtSnoopPacket();
 
 	/**
-	 * @brief decode_data
+	 * @brief
 	 *      decode packet data field
 	 * @param data
 	 */
 	void decode_data(char * data);
 
 	/**
-	 * @brief getOriginalLength
+	 * @brief
 	 *      get length of original packet (could be more than this packet's length)
 	 * @return
 	 */
 	int getOriginalLength();
 
 	/**
-	 * @brief getincludedLength
+	 * @brief
 	 *      get packet data field length
 	 * @return
 	 */
 	int getincludedLength();
 
 	/**
-	 * @brief getCumulativeDrops
+	 * @brief
 	 *      get number of packet lost between the first record and this record for this file
 	 * @return
 	 */
 	int getCumulativeDrops();
 
 	/**
-	 * @brief getUnixTimestampMicroseconds
+	 * @brief
 	 *      get unix timestamp for this packet record
 	 * @return
 	 */
 	uint64_t getUnixTimestampMicroseconds();
 
 	/**
-	 * @brief is_packet_sent
+	 * @brief
 	 *      define if packet record is sent
 	 * @return
 	 */
 	bool is_packet_sent();
 
 	/**
-	 * @brief is_packet_received
+	 * @brief
 	 *      define if packet record is received
 	 * @return
 	 */
 	bool is_packet_received();
 
 	/**
-	 * @brief is_data
+	 * @brief
 	 *      define if packet record is data record
 	 * @return
 	 */
 	bool is_data();
 
 	/**
-	 * @brief is_command_event
+	 * @brief
 	 *      define if packet record is command or event
 	 * @return
 	 */
 	bool is_command_event();
 
 	/**
-	* @brief getPacketData
+	* @brief
 	*      retrieve packet data
 	* @return
 	*/
 	std::vector<char> getPacketData();
 
 	/**
-	 * @brief printInfo
+	 * @brief
 	 *      print info in debug mode
 	 */
 	void printInfo();
 
 	/**
-	 * @brief toJson
+	 * @brief
 	 *      convert packet to json
 	 */
 	std::string toJson(bool beautify);
@@ -139,58 +139,58 @@ public:
 private:
 
 	/**
-	 * @brief original_length
+	 * @brief
 	 *      length of original packet (could be more than this packet's length)
 	 */
 	int original_length;
 
 	/**
-	 * @brief included_length
+	 * @brief
 	 *      packet data field length
 	 */
 	int included_length;
 
 	/**
-	 * @brief cumulative_drops
+	 * @brief
 	 *      number of packet lost between the first record and this record for this file
 	 */
 	int cumulative_drops;
 
 	/**
-	 * @brief timestamp_seconds
+	 * @brief
 	 *      unix timestamp for this packet record
 	 */
 	uint64_t timestamp_microseconds;
 
 	/**
-	 * @brief packet_data
+	 * @brief
 	 *      packet data
 	 */
 	std::vector<char> packet_data;
 
 	/**
-	 * @brief packet_sent
+	 * @brief
 	 *      define if packet record is sent
 	 * @return
 	 */
 	bool packet_sent;
 
 	/**
-	 * @brief packet_received
+	 * @brief
 	 *      define if packet record is received
 	 * @return
 	 */
 	bool packet_received;
 
 	/**
-	 * @brief packet_type_data
+	 * @brief
 	 *      define if packet record is data record
 	 * @return
 	 */
 	bool packet_type_data;
 
 	/**
-	 * @brief packet_type_command_event
+	 * @brief
 	 *      define if packet record is command or event
 	 * @return
 	 */

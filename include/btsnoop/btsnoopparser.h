@@ -47,7 +47,7 @@ class BtSnoopParser
 public:
 
 	/**
-	 * @brief BtSnoopParser
+	 * @brief
 	 *      initialize bt snoop file parser
 	 */
 	BtSnoopParser();
@@ -58,20 +58,20 @@ public:
 	~BtSnoopParser();
 
 	/**
-	 * @brief addSnoopListener
+	 * @brief
 	 *      add a listener to monitor streamed packet record
 	 * @param listener
 	 */
 	void addSnoopListener(IBtSnoopListener* listener);
 
 	/**
-	 * @brief snoopListenerList
+	 * @brief
 	 *      remove all listeners in snoop listener list
 	 */
 	 void clearListeners();
 
 	/**
-	 * @brief decode_streaming_file
+	 * @brief
 	 *      decode streaming file (non blocking method)
 	 * @param file_path
 	 * @return
@@ -80,13 +80,13 @@ public:
 	bool decode_streaming_file(std::string file_path);
 
 	/**
-	 * @brief join
+	 * @brief
 	 *      wait for thread to finish (blocking method)
 	 */
 	void join();
 
 	/**
-	 * @brief stop
+	 * @brief
 	 *      stop and join current thread
 	 */
 	void stop();
@@ -94,25 +94,25 @@ public:
 private:
 
 	/**
-	 * @brief decode_task
+	 * @brief
 	 *      decode thread task
 	 */
 	pthread_t decode_task;
 
 	/**
-	 * @brief snoop_task
+	 * @brief
 	 *      parser object manager
 	 */
 	BtSnoopTask snoop_task;
 
 	/**
-	 * @brief snoopListenerList
+	 * @brief
 	 *      list of listener registered
 	 */
 	std::vector<IBtSnoopListener*> snoopListenerList;
 
 	/**
-	 * @brief thread_started
+	 * @brief
 	 *      define if a thread has already been created before
 	 */
 	bool thread_started;

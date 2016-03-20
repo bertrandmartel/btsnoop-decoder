@@ -43,7 +43,7 @@ class BtSnoopFileInfo
 public:
 
 	/**
-	 * @brief FileHeader
+	 * @brief
 	 *      build file header
 	 * @param data
 	 *      file header data of size 16 (16 octet => 8 + 4 + 4)
@@ -55,35 +55,35 @@ public:
 	~BtSnoopFileInfo();
 
 	/**
-	 * @brief getIdentificationNumber
+	 * @brief
 	 *      get identification number
 	 * @return
 	 */
 	std::string getIdentificationNumber();
 
 	/**
-	 * @brief getVersionNumber
+	 * @brief
 	 *      get version number
 	 * @return
 	 */
 	int getVersionNumber();
 
 	/**
-	 * @brief getDatalinkNumber
+	 * @brief
 	 *     get datalink enum
 	 * @return
 	 */
 	datalink_type getDatalinkNumber();
 
 	/**
-	 * @brief getDatalinkStr
+	 * @brief
 	 *      get datalink name string
 	 * @return
 	 */
 	std::string getDatalinkStr();
 
 	/**
-	 * @brief printInfo
+	 * @brief
 	 *      print info in debug mode
 	 */
 	void printInfo();
@@ -91,25 +91,25 @@ public:
 private:
 
 	/**
-	 * @brief identification_pattern
+	 * @brief
 	 *      used to identify the file as a snoop formatted file
 	 */
 	std::string identification_number;
 
 	/**
-	 * @brief version_number
+	 * @brief
 	 *      version of snoop used
 	 */
 	int version_number;
 
 	/**
-	 * @brief datalink_type
+	 * @brief
 	 *      type of datalink layer used in this current file
 	 */
 	datalink_type datalink;
 
 	/**
-	 * @brief datalakink_str
+	 * @brief
 	 *      datalink type string
 	 */
 	std::string datalakink_str;

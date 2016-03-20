@@ -1,6 +1,8 @@
-# C++ Bluetooth Snoop File streaming decoder #
+# Bluetooth Snoop File streaming decoder #
 
 [![Build Status](https://travis-ci.org/akinaru/btsnoop-decoder.svg?branch=master)](https://travis-ci.org/akinaru/btsnoop-decoder)
+[![Download](https://api.bintray.com/packages/akinaru/generic/btsnoop-decoder/images/download.svg) ](https://bintray.com/akinaru/generic/btsnoop-decoder/_latestVersion)
+[![License](http://img.shields.io/:license-mit-blue.svg)](LICENSE.md)
 
 Small library to decode Bluetooth Snoop file used to store radio packet records.
 
@@ -11,16 +13,27 @@ Note : this library doesnt decode HCI Bluetooth data, only snoop-like format
 
 <hr/>
 
-##Build
+## Build library
 
 ```
-cd snoop-stream-lib
-make clean
+cmake .
 make
 ```
 
-Library release is under `build-btsnoop-X.X` directory.
+Library release is under `lib` directory.
 
+## Build test
+
+```
+cd test
+cmake .
+make
+```
+
+Usage :
+```
+./bin/btsnoop-test <path to btsnoop file>
+```
 
 ##Decode non-dynamic Bt snoop file
 
@@ -180,13 +193,13 @@ LOCAL_C_INCLUDES := $NDK/sources/cxx-stl/gnu-libstdc++/4.8/include
 
 ##Examples
 
-[From test project in main.cpp](https://github.com/akinaru/btsnoop-decoder/blob/master/snoop-stream-test/main.cpp)
+[From test project in main.cpp](https://github.com/akinaru/btsnoop-decoder/blob/master/test/src/main.cpp)
 
 
 ##Memory checking
 
 ``
-valgrind --tool=memcheck --leak-check=full ./snoop-test
+valgrind --tool=memcheck --leak-check=full ./bin/btsnoop-test
 ``
 
 ##Specifications

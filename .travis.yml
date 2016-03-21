@@ -2,7 +2,6 @@ language: cpp
 script: 
   - $CXX --version
   - cmake . ; make
-  - cd test ; cmake . ; make
 compiler:
   - gcc
 install:

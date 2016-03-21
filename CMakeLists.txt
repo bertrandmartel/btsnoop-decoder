@@ -8,7 +8,12 @@ endif()
 
 set(LIBRARY_OUTPUT_PATH lib/${CMAKE_BUILD_TYPE})
 
-include_directories(include)
+set(EXECUTABLE_OUTPUT_PATH bin/${CMAKE_BUILD_TYPE})
+
+include_directories(
+    include
+    test/include
+)
 
 file(
         GLOB_RECURSE
@@ -27,4 +32,22 @@ add_library(
         btsnoop
         SHARED
         ${source_files}
+)
+
+file(
+        GLOB_RECURSE
+        source_test_files
+        test/src/*
+        test/include/*
+)
+
+add_executable(
+        btsnoop-test
+        ${source_test_files}
+)
+
+target_link_libraries(
+        btsnoop-test
+        btsnoop
+        pthread
 )

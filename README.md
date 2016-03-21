@@ -17,7 +17,7 @@ Note : this library doesnt decode HCI Bluetooth data, only snoop-like format
 
 http://akinaru.github.io/btsnoop-decoder
 
-## Build library
+## Build
 
 ```
 cmake .
@@ -26,17 +26,12 @@ make
 
 Library release is under `lib` directory.
 
-## Build test
+## Test
+
+Syntax : ``./btsnoop-test <btsnoop_file>``
 
 ```
-cd test
-cmake .
-make
-```
-
-Usage :
-```
-./bin/btsnoop-test <path to btsnoop file>
+./bin/btsnoop-test ./snoop-files/btsnoop_hci.log
 ```
 
 ##Decode non-dynamic Bt snoop file

@@ -30,6 +30,7 @@
 #include "btsnoop/btsnoopfileinfo.h"
 #include "btsnoop/btsnooppacket.h"
 #include "ibtsnooplistener.h"
+#include "map"
 
 #ifdef __ANDROID__
 #include "jni.h"
@@ -64,7 +65,27 @@ public:
 	 */
 	BtSnoopTask(std::string file_path,std::vector<IBtSnoopListener*> *snoopListenerList);
 
+	/**
+	 * @brief
+	 *      build decoding task with btsnoop file input & packet listener list
+	 * @param file_path
+	 *       btsnoop file path
+	 * @param packet_number
+	 *      number of packet to decoded (from the end to the beginning)
+	 * @param snoopListenerList
+	 *       list of listeners to be notified when a packet is decoded
+	 */
+	BtSnoopTask(std::string file_path,std::vector<IBtSnoopListener*> *snoopListenerList,int packet_number);
+
 	~BtSnoopTask();
+
+	/**
+	 * @brief
+	 *      get the last <packet_number> packet index without doing any decoding
+	 * @return
+	 *      last <packet_number> packet index
+	 */
+	int get_last_n_packet_index(int packet_number);
 
 	/**
 	 * @brief
@@ -79,10 +100,12 @@ public:
 	 *      file
 	 * @param current_position
 	 *      current position of file (initial is 0 / cant be -1)
+	 * @param fill_index_table
+	 * 		set to true if packet index table is filled each time a packet is decoded
 	 * @return
 	 *      new position of file (to match with incoming changes)
 	 */
-	int decode_streaming_file(std::ifstream *fileStream,int current_position);
+	int decode_streaming_file(std::ifstream *fileStream,int current_position,bool fill_index_table);
 
 	/**
 	 * @brief
@@ -152,6 +175,11 @@ private:
 	std::vector<IBtSnoopListener*> *snoopListenerList;
 
 	/**
+	 * packet index table map 
+	 */
+	std::map<int, int> index_table;
+
+	/**
 	 * list of all decoded packets (currently decoded)
 	 */
 	std::vector<BtSnoopPacket> packetDataRecords;
@@ -173,6 +201,9 @@ private:
 
 	/* state for packet record streaming*/
 	int packet_record_state;
+
+	/* number of packet to decoded (from the end to the beginning) */
+	int packet_number;
 
 	#ifdef __ANDROID__
 	/*local reference to jni_env attached to JVM*/

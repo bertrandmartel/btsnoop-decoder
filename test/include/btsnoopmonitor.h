@@ -57,6 +57,7 @@ public:
 	 */
 	void onSnoopPacketReceived(BtSnoopFileInfo fileInfo,BtSnoopPacket packet);
 
+	int count;
 };
 
 #endif // BTSNOOPMONITOR_H

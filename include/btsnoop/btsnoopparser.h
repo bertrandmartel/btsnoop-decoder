@@ -72,12 +72,24 @@ public:
 
 	/**
 	 * @brief
-	 *      decode streaming file (non blocking method)
+	 *      decode streaming file
 	 * @param file_path
 	 * @return
 	 *      success status
 	 */
 	bool decode_streaming_file(std::string file_path);
+
+	/**
+	 * @brief
+	 *      decode streaming file with a fixed number of decoded packet (from the end of the files to the beginning)
+	 * @param file_path
+	 *      btsnoop file path
+	 * @param packetNumber
+	 *      number of packet to decoded (from the end to the beginning)
+	 * @return
+	 *      success status
+	 */
+	bool decode_streaming_file(std::string file_path, int packetNumber);
 
 	/**
 	 * @brief

@@ -34,7 +34,7 @@ Syntax : ``./btsnoop-test <btsnoop_file>``
 ./bin/btsnoop-test ./snoop-files/btsnoop_hci.log
 ```
 
-##Decode non-dynamic Bt snoop file
+## Decode static btsnoop file
 
 To decode one single bt snoop file with no streaming support, use BtSnoopTask with method :
 
@@ -61,7 +61,7 @@ else{
 }
 ```
 
-##Decode dynamic Bt snoop file
+## Decode streaming btsnoop file
 
 * To decode in streaming mode a bt snoop file, use ``BtSnoopParser`` :
 
@@ -137,7 +137,36 @@ else{
 
 * You can block file monitoring process with ``void BtSnoopParser::join();`` method
 
-##Datamodel description
+* You can start decoding from the last N packet with :
+
+``bool BtSnoopParser::decode_streaming_file(std::string file_path,int packet_number)``
+
+Exemple : 
+
+```
+#include "btsnoop/btsnoopparser.h"
+
+..........
+..........
+
+BtSnoopParser parser;
+
+BtSnoopMonitor monitor;
+
+parser.addSnoopListener(&monitor);
+
+// this will decode from the last 10 packets
+bool success = parser.decode_streaming_file("/path/to/your/file",10);
+
+if (success){
+	//success
+}
+else{
+	//failure (bad reading / file not found)
+}
+```
+
+## Datamodel description
 
 
 * ``BtSnoopTask`` description :
@@ -175,7 +204,7 @@ else{
 An Android Makefile is provided for easy Android integration. Simply add the git repository as a submodule in your `jni` directory :
 
 ```
-git submodule add https://github.com/akinaru/btsnoop-decoder.git <yourproject/src/main/jni/btsnoop-decoder>
+git submodule add git://github.com/akinaru/btsnoop-decoder.git <yourproject/src/main/jni/btsnoop-decoder>
 ```
 
 In you `Application.mk` add gnustl support :

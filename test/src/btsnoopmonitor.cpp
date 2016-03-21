@@ -39,6 +39,7 @@ using namespace std;
 
 BtSnoopMonitor::BtSnoopMonitor()
 {
+	count=0;
 }
 
 BtSnoopMonitor::~BtSnoopMonitor(){
@@ -53,9 +54,10 @@ BtSnoopMonitor::~BtSnoopMonitor(){
  *      snoop packet record object
  */
 void BtSnoopMonitor::onSnoopPacketReceived(BtSnoopFileInfo fileInfo,BtSnoopPacket packet){
-
-	//fileheader.printInfo();
+	count++;
+	cout << "packet count : " << count << endl;
+	//fileInfo.printInfo();
 	packet.printInfo();
-	cout << packet.toJson(true) << endl;
+	//cout << packet.toJson(true) << endl;
 	cout << "_________________________" << endl;
 }

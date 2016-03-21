@@ -68,7 +68,7 @@ BtSnoopTask::BtSnoopTask(std::string file_path){
 	this->file_path=file_path;
 	task_control=false;
 	state = FILE_HEADER;
-
+	this->packet_number = -1;
 }
 
 /**
@@ -85,7 +85,25 @@ BtSnoopTask::BtSnoopTask(std::string file_path,std::vector<IBtSnoopListener*> *s
 	this->snoopListenerList=snoopListenerList;
 	task_control=false;
 	state = FILE_HEADER;
+	this->packet_number = -1;
+}
 
+/**
+ * @brief
+ *      build decoding task with btsnoop file input & packet listener list
+ * @param file_path
+ *       btsnoop file path
+ * @param packet_number
+ *      number of packet to decoded (from the end to the beginning)
+ * @param snoopListenerList
+ *       list of listeners to be notified when a packet is decoded
+ */
+BtSnoopTask::BtSnoopTask(std::string file_path,std::vector<IBtSnoopListener*> *snoopListenerList,int packet_number){
+	this->file_path = file_path;
+	this->snoopListenerList = snoopListenerList;
+	task_control = false;
+	state = FILE_HEADER;
+	this->packet_number = packet_number;
 }
 
 /**
@@ -139,12 +157,22 @@ void * BtSnoopTask::decoding_task(void) {
 
 	packetDataRecords.clear();
 	task_control=true;
-
+	state = FILE_HEADER;
 	struct timespec tim, tim2;
 	tim.tv_sec = 0;
 	tim.tv_nsec = 1000000L * 200;
 
 	int index = 0;
+
+	if (this->packet_number != -1){
+
+		//set index to the index of the begninning of the last this->packet_number packet
+		index = get_last_n_packet_index(this->packet_number);
+		cout << "beginning from index : " << index << endl;
+		if (index == 0){
+			state = FILE_HEADER;
+		}
+	}
 
 	while (task_control) {
 
@@ -159,7 +187,7 @@ void * BtSnoopTask::decoding_task(void) {
 
 			if (!fileStream.eof() && fileStream.tellg()!=-1 && length!=index){
 
-				index = decode_streaming_file(&fileStream,index);
+				index = decode_streaming_file(&fileStream,index,false);
 			}
 
 		}
@@ -192,15 +220,61 @@ void * BtSnoopTask::decoding_task(void) {
 
 /**
  * @brief
+ *      get the last <packet_number> packet index without doing any decoding
+ * @return
+ *      last <packet_number> packet index
+ */
+int BtSnoopTask::get_last_n_packet_index(int packet_number) {
+
+	int index = 0;
+
+	ifstream fileStream(file_path.c_str());
+
+	if (fileStream.is_open()) {
+
+		fileStream.seekg(0,ios::beg);
+
+		if (!fileStream.eof() && fileStream.tellg()!=-1) {
+
+			index = decode_streaming_file(&fileStream, 0, true);
+
+			if ((index_table.size()-packet_number-1) > 0) {
+				return index_table[index_table.size()-packet_number-1];
+			}
+		}
+
+	}
+	else{
+
+		#ifdef __ANDROID__
+		__android_log_print(ANDROID_LOG_VERBOSE,"snoop decoder","file could not be opened");
+		#else
+		cout << "file could not be opened" << endl;
+		#endif // __ANDROID__
+	}
+
+	return index;
+}
+
+/**
+ * @brief
  *      decode full snoop file header / packet record data
  * @param fileStream
  *      file
  * @param current_position
  *      current position of file (initial is 0 / cant be -1)
+ * @param fill_index_table
+ * 		set to true if packet index table is filled each time a packet is decoded
  * @return
  *      new position of file (to match with incoming changes)
  */
-int BtSnoopTask::decode_streaming_file(ifstream *fileStream,int current_position) {
+int BtSnoopTask::decode_streaming_file(ifstream *fileStream,int current_position,bool fill_index_table) {
+
+	int packet_count=0;
+
+	if (fill_index_table){
+		index_table.clear();
+	}
 
 	switch(state){
 
@@ -210,7 +284,7 @@ int BtSnoopTask::decode_streaming_file(ifstream *fileStream,int current_position
 
 			fileStream->read(file_header, 16);
 
-			fileInfo=BtSnoopFileInfo(file_header);
+			fileInfo = BtSnoopFileInfo(file_header);
 
 			delete[] file_header;
 
@@ -362,16 +436,22 @@ int BtSnoopTask::decode_streaming_file(ifstream *fileStream,int current_position
 						#endif //__ANDROID__
 						*/
 
-						packet.decode_data(packet_data);
+						if (fill_index_table) {
+							index_table[packet_count] = current_position;
+							packet_count++;
+						}
+						else {
+							packet.decode_data(packet_data);
 
-						delete[] packet_data;
+							delete[] packet_data;
 
-						for (unsigned int i = 0; i  < snoopListenerList->size();i++){
-							#ifdef __ANDROID__
-							(*snoopListenerList)[i]->onSnoopPacketReceived(fileInfo,packet,jni_env);
-							#else
-							(*snoopListenerList)[i]->onSnoopPacketReceived(fileInfo,packet);
-							#endif //__ANDROID__
+							for (unsigned int i = 0; i  < snoopListenerList->size();i++){
+								#ifdef __ANDROID__
+								(*snoopListenerList)[i]->onSnoopPacketReceived(fileInfo,packet,jni_env);
+								#else
+								(*snoopListenerList)[i]->onSnoopPacketReceived(fileInfo,packet);
+								#endif //__ANDROID__
+							}
 						}
 					}
 				}

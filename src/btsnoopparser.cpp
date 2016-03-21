@@ -101,7 +101,7 @@ void BtSnoopParser::stop(){
 
 /**
  * @brief
- *      decode streaming file (non blocking method)
+ *      decode streaming file
  * @param file_path
  *      btsnoop file path
  * @return
@@ -115,6 +115,38 @@ bool BtSnoopParser::decode_streaming_file(std::string file_path){
 		(void)pthread_join(decode_task,NULL);
 
 	snoop_task= BtSnoopTask(file_path,&snoopListenerList);
+
+	int rc = pthread_create(&decode_task, NULL,&BtSnoopTask::decoding_helper,(void*)&snoop_task);
+
+	if (rc){
+		cerr << "Error:unable to create thread," << rc << endl;
+		return false;
+	}
+	else{
+		thread_started=true;
+	}
+
+	return true;
+}
+
+/**
+ * @brief
+ *      decode streaming file with a fixed number of decoded packet (from the end of the files to the beginning)
+ * @param file_path
+ *      btsnoop file path
+ * @param packetNumber
+ *      number of packet to decoded (from the end to the beginning)
+ * @return
+ *      success status
+ */
+bool BtSnoopParser::decode_streaming_file(std::string file_path, int packetNumber){
+
+	snoop_task.stop();
+
+	if (thread_started)
+		(void)pthread_join(decode_task,NULL);
+
+	snoop_task= BtSnoopTask(file_path,&snoopListenerList,packetNumber);
 
 	int rc = pthread_create(&decode_task, NULL,&BtSnoopTask::decoding_helper,(void*)&snoop_task);
 

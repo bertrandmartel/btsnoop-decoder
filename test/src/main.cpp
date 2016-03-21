@@ -89,7 +89,7 @@ int main(int argc, char *argv[])
 	parser.addSnoopListener(&monitor);
 
 	//parse streaming file
-	bool success = parser.decode_streaming_file(recordFile);
+	bool success = parser.decode_streaming_file(recordFile,10);
 
 	if (!success)
 		cerr << "file reading error occured" << endl;

@@ -143,8 +143,6 @@ public:
 
 	#ifdef __ANDROID__
 	static JavaVM* jvm;
-	static jobject jobj;
-	static jmethodID mid;
 	#endif // __ANDROID__
 
 private:
@@ -187,9 +185,6 @@ private:
 	/* packet header value (24 o)*/
 	char * packet_header;
 
-	/* packet header index count */
-	int header_index;
-
 	/* packet data value (dynamic size)*/
 	char * packet_data;
 
@@ -198,9 +193,6 @@ private:
 
 	/* current packet*/
 	BtSnoopPacket packet;
-
-	/* state for packet record streaming*/
-	int packet_record_state;
 
 	/* number of packet to decoded (from the end to the beginning) */
 	int packet_number;

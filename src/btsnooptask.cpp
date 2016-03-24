@@ -42,8 +42,6 @@
 #include "jni.h"
 
 JavaVM*   BtSnoopTask::jvm=0;
-jobject   BtSnoopTask::jobj;
-jmethodID BtSnoopTask::mid;
 
 #endif // __ANDROID__
 
@@ -168,9 +166,19 @@ void * BtSnoopTask::decoding_task(void) {
 
 		//set index to the index of the begninning of the last this->packet_number packet
 		index = get_last_n_packet_index(this->packet_number);
-		cout << "beginning from index : " << index << endl;
+
 		if (index == 0){
 			state = FILE_HEADER;
+		}
+		if (snoopListenerList!=0){
+
+			for (unsigned int i = 0; i  < snoopListenerList->size();i++){
+				#ifdef __ANDROID__
+				snoopListenerList->at(i)->onFinishedCountingPackets(index_table.size(),jni_env);
+				#else
+				snoopListenerList->at(i)->onFinishedCountingPackets(index_table.size());
+				#endif //__ANDROID__
+			}
 		}
 	}
 
@@ -196,7 +204,7 @@ void * BtSnoopTask::decoding_task(void) {
 			#ifdef __ANDROID__
 			__android_log_print(ANDROID_LOG_VERBOSE,"snoop decoder","file could not be opened");
 			#else
-			cout << "file could not be opened" << endl;
+			cerr << "file could not be opened" << endl;
 			#endif // __ANDROID__
 
 			return 0;
@@ -238,18 +246,20 @@ int BtSnoopTask::get_last_n_packet_index(int packet_number) {
 
 			index = decode_streaming_file(&fileStream, 0, true);
 
-			if ((index_table.size()-packet_number-1) > 0) {
+			int check = index_table.size()-packet_number-1;
+
+			if (check > 0) {
 				return index_table[index_table.size()-packet_number-1];
 			}
+			return 0;
 		}
-
 	}
 	else{
 
 		#ifdef __ANDROID__
 		__android_log_print(ANDROID_LOG_VERBOSE,"snoop decoder","file could not be opened");
 		#else
-		cout << "file could not be opened" << endl;
+		cerr << "file could not be opened" << endl;
 		#endif // __ANDROID__
 	}
 
@@ -290,10 +300,7 @@ int BtSnoopTask::decode_streaming_file(ifstream *fileStream,int current_position
 
 			current_position = fileStream->tellg();
 
-			packet_record_state = 0;
-
 			state=PACKET_RECORD;
-			
 		}
 		case PACKET_RECORD:
 		{
@@ -303,162 +310,47 @@ int BtSnoopTask::decode_streaming_file(ifstream *fileStream,int current_position
 
 			while ((fileStream->tellg() != -1) && (length != fileStream->tellg())) {
 
-				if ((packet_record_state == 1) || (packet_record_state == 0)){
+				char * packet_header = new char[24];
+
+				fileStream->read(packet_header, 24);
+
+				if (fileStream->tellg()!=-1){
+
+					BtSnoopPacket packet(packet_header);
+
+					char * packet_data = new char[packet.getincludedLength()];
+
+					fileStream->read(packet_data, packet.getincludedLength());
 
 					current_position = fileStream->tellg();
 
-					if (packet_record_state == 0){
-
-						/*
-						#ifdef __ANDROID__
-						__android_log_print(ANDROID_LOG_VERBOSE,"snoop decoder","[1] position : %d\n",fileStream->tellg());
-						#else
-						cout << "[1] position : " << fileStream->tellg() << endl;
-						#endif //__ANDROID__
-						*/
-
-						packet_header = new char[24];
-						header_index = 0;
-
-						packet_record_state = 1;
+					if (fill_index_table) {
+						index_table[packet_count] = current_position;
+						packet_count++;
 					}
+					else {
+						packet.decode_data(packet_data);
 
-					for (unsigned int i = header_index; i< 24;i++){
+						delete[] packet_data;
 
-						current_position = fileStream->tellg();
-
-						fileStream->seekg (0, fileStream->end);
-						length = fileStream->tellg();
-						fileStream->seekg(current_position,ios::beg);
-
-						if ((fileStream->tellg() != -1) && (length != fileStream->tellg())){
-
-							packet_header[header_index] = fileStream->get();
-							header_index++;
-
-							/*
-							#ifdef __ANDROID__
-							__android_log_print(ANDROID_LOG_VERBOSE,"snoop decoder","[2] position : %d\n",fileStream->tellg());
-							#else
-							cout << "[2] position : " << fileStream->tellg() << endl;
-							#endif //__ANDROID__
-							*/
-						}
-						else{
-
-							if (fileStream->tellg() != -1)
-								current_position = fileStream->tellg();
-
-							break;
-						}
-					}
-
-					//cout << "header_index : " << header_index << " sur 24" << endl;
-						
-					if (header_index == 24){
-						packet_record_state = 2;
-					}
-
-					/*
-					#ifdef __ANDROID__
-					__android_log_print(ANDROID_LOG_VERBOSE,"snoop decoder","[3] position : %d\n",fileStream->tellg());
-					#else
-					cout << "[3] position : " << fileStream->tellg() << endl;
-					#endif //__ANDROID__
-					*/
-				}
-
-				if ((packet_record_state == 2) || (packet_record_state == 3))
-				{
-
-					if (packet_record_state == 2){
-
-						/*
-						#ifdef __ANDROID__
-						__android_log_print(ANDROID_LOG_VERBOSE,"snoop decoder","[4] position : %d\n",fileStream->tellg());
-						#else
-						cout << "[4] position : " << fileStream->tellg() << endl;
-						#endif //__ANDROID__
-						*/
-
-						packet = BtSnoopPacket(packet_header);
-						delete[] packet_header;
-
-						packet_data = new char[packet.getincludedLength()];
-						data_index = 0;
-
-						packet_record_state = 3;
-					}
-
-					for (int i = data_index; i< packet.getincludedLength();i++){
-
-						current_position = fileStream->tellg();
-
-						fileStream->seekg (0, fileStream->end);
-						length = fileStream->tellg();
-						fileStream->seekg(current_position,ios::beg);
-
-						if ((fileStream->tellg() != -1) && (length != fileStream->tellg())){
-
-							packet_data[data_index] = fileStream->get();
-							data_index++;
-
-							/*
-							#ifdef __ANDROID__
-							__android_log_print(ANDROID_LOG_VERBOSE,"snoop decoder","[5] position : %d\n",fileStream->tellg());
-							#else
-							cout << "[5] position : " << fileStream->tellg() << endl;
-							#endif //__ANDROID__
-							*/
-						}
-						else{
-
-							if (fileStream->tellg() != -1)
-								current_position = fileStream->tellg();
-							break;
-						}
-					}
-
-					if (fileStream->tellg() != -1)
-								current_position = fileStream->tellg();
-
-					//cout << "data index : " << data_index << " - packet length : " << packet.getincludedLength() << endl;
-
-					if (data_index == packet.getincludedLength()){
-
-						packet_record_state = 0;
-
-						/*
-						#ifdef __ANDROID__
-						__android_log_print(ANDROID_LOG_VERBOSE,"snoop decoder","[6] position : %d\n",fileStream->tellg());
-						#else
-						cout << "[6] position : " << fileStream->tellg() << endl;
-						#endif //__ANDROID__
-						*/
-
-						if (fill_index_table) {
-							index_table[packet_count] = current_position;
-							packet_count++;
-						}
-						else {
-							packet.decode_data(packet_data);
-
-							delete[] packet_data;
+						if (snoopListenerList!=0){
 
 							for (unsigned int i = 0; i  < snoopListenerList->size();i++){
 								#ifdef __ANDROID__
-								(*snoopListenerList)[i]->onSnoopPacketReceived(fileInfo,packet,jni_env);
+								snoopListenerList->at(i)->onSnoopPacketReceived(fileInfo,packet,jni_env);
 								#else
-								(*snoopListenerList)[i]->onSnoopPacketReceived(fileInfo,packet);
+								snoopListenerList->at(i)->onSnoopPacketReceived(fileInfo,packet);
 								#endif //__ANDROID__
 							}
 						}
+
+						packetDataRecords.push_back(packet);
 					}
 				}
+				delete[] packet_header;
 			}
 		}
 	}
-
 	return current_position;
 }
 

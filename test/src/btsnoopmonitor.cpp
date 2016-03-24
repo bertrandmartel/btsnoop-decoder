@@ -61,3 +61,14 @@ void BtSnoopMonitor::onSnoopPacketReceived(BtSnoopFileInfo fileInfo,BtSnoopPacke
 	//cout << packet.toJson(true) << endl;
 	cout << "_________________________" << endl;
 }
+
+
+/**
+ * @brief
+ * 		called when packet counting is completed
+ * @param packet_count
+ *      total packet count
+ */
+void BtSnoopMonitor::onFinishedCountingPackets(int packet_count){
+	cout << "finished counting packets : " << packet_count << endl;
+}

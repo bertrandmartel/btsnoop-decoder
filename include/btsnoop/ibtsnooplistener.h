@@ -58,6 +58,16 @@ public:
 	 */
 	virtual void onSnoopPacketReceived(BtSnoopFileInfo fileInfo,BtSnoopPacket packet,JNIEnv * jni_env) = 0;
 
+	/**
+	 * @brief
+	 * 		called when packet counting is completed
+	 * @param packet_count
+	 *      total packet count
+	 * @param jni_env
+	 *      JNI env object
+	 */
+	virtual void onFinishedCountingPackets(int packet_count, JNIEnv * jni_env) = 0;
+
 	#else
 
 	/**
@@ -69,6 +79,14 @@ public:
 	 *      snoop packet record object
 	 */
 	virtual void onSnoopPacketReceived(BtSnoopFileInfo fileInfo,BtSnoopPacket packet) = 0;
+
+	/**
+	 * @brief
+	 * 		called when packet counting is completed
+	 * @param packet_count
+	 *      total packet count
+	 */
+	virtual void onFinishedCountingPackets(int packet_count) = 0;
 
 	#endif //__ANDROID__
 };

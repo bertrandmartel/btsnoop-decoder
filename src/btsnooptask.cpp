@@ -35,6 +35,8 @@
 #include "btsnoop/btsnoopfileinfo.h"
 #include "btsnoop/btsnooppacket.h"
 #include "iostream"
+#include <stdexcept>
+#include "btsnoop/btsnooperror.h"
 
 #ifdef __ANDROID__
 
@@ -109,7 +111,7 @@ BtSnoopTask::BtSnoopTask(std::string file_path,std::vector<IBtSnoopListener*> *s
  *      exit control loop
  */
 BtSnoopTask::~BtSnoopTask(){
-	 task_control=false;
+	task_control=false;
 }
 
 /**
@@ -135,7 +137,7 @@ void * BtSnoopTask::decoding_task(void) {
 
 		if (getEnvStat == JNI_EDETACHED) {
 
-			__android_log_print(ANDROID_LOG_INFO,"snoop decoder","jvm not attached\n");
+			__android_log_print(ANDROID_LOG_VERBOSE,"snoop decoder","jvm not attached\n");
 
 			if (BtSnoopTask::jvm->AttachCurrentThread(&jni_env, NULL) != 0) {
 
@@ -183,31 +185,61 @@ void * BtSnoopTask::decoding_task(void) {
 	}
 
 	while (task_control) {
+		
+		try{
+			ifstream fileStream(file_path.c_str());
 
-		ifstream fileStream(file_path.c_str());
+			fileStream.exceptions ( ifstream::eofbit | ifstream::failbit | ifstream::badbit );
 
-		if (fileStream.is_open()) {
+			if (fileStream.is_open()) {
 
-			fileStream.seekg (0, fileStream.end);
-			int length = fileStream.tellg();
+				fileStream.seekg (0, fileStream.end);
 
-			fileStream.seekg(index,ios::beg);
+				int length = fileStream.tellg();
 
-			if (!fileStream.eof() && fileStream.tellg()!=-1 && length!=index){
+				fileStream.seekg(index,ios::beg);
 
-				index = decode_streaming_file(&fileStream,index,false);
+				if (!fileStream.eof() && fileStream.tellg()!=-1 && length!=index){
+					index = decode_streaming_file(&fileStream,index,false);
+				}
 			}
+			else{
 
+				#ifdef __ANDROID__
+				__android_log_print(ANDROID_LOG_ERROR,"snoop decoder","file could not be opened");
+				#else
+				cerr << "file could not be opened" << endl;
+				#endif // __ANDROID__
+				if (snoopListenerList!=0){
+
+					for (unsigned int i = 0; i  < snoopListenerList->size();i++){
+						#ifdef __ANDROID__
+						snoopListenerList->at(i)->onError(ERROR_OPENING,"file could not be opened",jni_env);
+						#else
+						snoopListenerList->at(i)->onError(ERROR_OPENING,"file could not be opened");
+						#endif //__ANDROID__
+					}
+				}
+				task_control=false;
+			}
 		}
-		else{
-
+		catch(std::exception const& e) {
 			#ifdef __ANDROID__
-			__android_log_print(ANDROID_LOG_VERBOSE,"snoop decoder","file could not be opened");
+			__android_log_print(ANDROID_LOG_ERROR,"snoop decoder","Exception opening/reading file : %s",e.what());
 			#else
-			cerr << "file could not be opened" << endl;
+			cerr << "Exception opening/reading file : " << e.what() << endl;
 			#endif // __ANDROID__
+			if (snoopListenerList!=0){
 
-			return 0;
+				for (unsigned int i = 0; i  < snoopListenerList->size();i++){
+					#ifdef __ANDROID__
+					snoopListenerList->at(i)->onError(ERROR_UNKNOWN,e.what(),jni_env);
+					#else
+					snoopListenerList->at(i)->onError(ERROR_UNKNOWN,e.what());
+					#endif //__ANDROID__
+				}
+			}
+			task_control=false;
 		}
 		nanosleep(&tim, &tim2);
 	}
@@ -257,7 +289,7 @@ int BtSnoopTask::get_last_n_packet_index(int packet_number) {
 	else{
 
 		#ifdef __ANDROID__
-		__android_log_print(ANDROID_LOG_VERBOSE,"snoop decoder","file could not be opened");
+		__android_log_print(ANDROID_LOG_ERROR,"snoop decoder","file could not be opened");
 		#else
 		cerr << "file could not be opened" << endl;
 		#endif // __ANDROID__

@@ -22,96 +22,18 @@
  * THE SOFTWARE.                                                                    * 
  ************************************************************************************/
 /**
-	ibtsnooplistener.h
+	btsnooperror.h
 
-	listener for streamed packet record and file information
+	list of error state when reading/opening btsnoop file
 
 	@author Bertrand Martel
 	@version 0.1
 */
 
-#ifndef IBTSNOOPLISTENER_H
-#define IBTSNOOPLISTENER_H
+#ifndef BTSNOOPERROR_H
+#define BTSNOOPERROR_H
 
-#include "btsnooppacket.h"
-#include "btsnoopfileinfo.h"
-#include "btsnooperror.h"
+#define ERROR_OPENING 0
+#define ERROR_UNKNOWN 1
 
-#ifdef __ANDROID__
-#include "jni.h"
-#endif //__ANDROID__
-
-class IBtSnoopListener
-{
-
-public:
-
-	#ifdef __ANDROID__
-	/**
-	 * @brief
-	 *      called when a new packet record has been received
-	 * @param fileInfo
-	 *      file info object
-	 * @param packet
-	 *      snoop packet record object
-	 * @param jni_env
-	 *      JNI env object
-	 */
-	virtual void onSnoopPacketReceived(BtSnoopFileInfo fileInfo,BtSnoopPacket packet,JNIEnv * jni_env) = 0;
-
-	/**
-	 * @brief
-	 * 		called when packet counting is completed
-	 * @param packet_count
-	 *      total packet count
-	 * @param jni_env
-	 *      JNI env object
-	 */
-	virtual void onFinishedCountingPackets(int packet_count, JNIEnv * jni_env) = 0;
-
-	/**
-	 * @brief
-	 * 		called when and error occured
-	 * @param error_code
-	 *      error code
-	 * @param error_message
-	 *      error message
-	 * @param jni_env
-	 *      JNI env object
-	 */
-	virtual void onError(int error_code,std::string error_message, JNIEnv * jni_env) = 0;
-
-	#else
-
-	/**
-	 * @brief
-	 *      called when a new packet record has been received
-	 * @param fileInfo
-	 *      file info object
-	 * @param packet
-	 *      snoop packet record object
-	 */
-	virtual void onSnoopPacketReceived(BtSnoopFileInfo fileInfo,BtSnoopPacket packet) = 0;
-
-	/**
-	 * @brief
-	 * 		called when packet counting is completed
-	 * @param packet_count
-	 *      total packet count
-	 */
-	virtual void onFinishedCountingPackets(int packet_count) = 0;
-
-	/**
-	 * @brief
-	 * 		called when and error occured
-	 * @param error_code
-	 *      error code
-	 * @param error_message
-	 *      error message
-	 */
-	virtual void onError(int error_code,std::string error_message) = 0;
-
-	#endif //__ANDROID__
-};
-
-#endif // IBTSNOOPLISTENER_H
+#endif // BTSNOOPERROR_H

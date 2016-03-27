@@ -62,6 +62,18 @@ void BtSnoopMonitor::onSnoopPacketReceived(BtSnoopFileInfo fileInfo,BtSnoopPacke
 	cout << "_________________________" << endl;
 }
 
+/**
+ * @brief
+ * 		called when and error occured
+ * @param error_code
+ *      error code
+ * @param error_message
+ *      error message
+ */
+void BtSnoopMonitor::onError(int error_code,std::string error_message){
+	cout << "error occured with code " << error_code << " : " << error_message << endl;
+}
+
 
 /**
  * @brief

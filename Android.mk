@@ -3,6 +3,7 @@ LOCAL_PATH := $(call my-dir)
 include $(CLEAR_VARS)
 
 LOCAL_CFLAGS := -std=gnu++11
+LOCAL_CFLAGS += -funwind-tables -Wl,--no-merge-exidx-entries
 LOCAL_CPPFLAGS += -fexceptions
 
 LOCAL_MODULE := btsnoopdecoder

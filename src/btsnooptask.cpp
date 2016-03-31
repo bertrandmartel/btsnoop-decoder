@@ -189,7 +189,7 @@ void * BtSnoopTask::decoding_task(void) {
 		try{
 			ifstream fileStream(file_path.c_str());
 
-			fileStream.exceptions ( ifstream::eofbit | ifstream::failbit | ifstream::badbit );
+			fileStream.exceptions ( ifstream::eofbit | ifstream::badbit );
 
 			if (fileStream.is_open()) {
 
@@ -252,8 +252,8 @@ void * BtSnoopTask::decoding_task(void) {
 	else{
 		__android_log_print(ANDROID_LOG_ERROR,"snoop decoder","jvm not defined\n");
 	}
-
-	#endif // __ANDROID__
+    
+    #endif // __ANDROID__
 
 	return 0;
 }

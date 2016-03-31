@@ -187,16 +187,13 @@ void * BtSnoopTask::decoding_task(void) {
 	while (task_control) {
 		
 		try{
+			
 			ifstream fileStream(file_path.c_str());
-
-			fileStream.exceptions ( ifstream::eofbit | ifstream::badbit );
 
 			if (fileStream.is_open()) {
 
 				fileStream.seekg (0, fileStream.end);
-
 				int length = fileStream.tellg();
-
 				fileStream.seekg(index,ios::beg);
 
 				if (!fileStream.eof() && fileStream.tellg()!=-1 && length!=index){
@@ -245,6 +242,7 @@ void * BtSnoopTask::decoding_task(void) {
 	}
 
 	#ifdef __ANDROID__
+
 
 	if (BtSnoopTask::jvm!=0){
 		BtSnoopTask::jvm->DetachCurrentThread();
@@ -323,15 +321,11 @@ int BtSnoopTask::decode_streaming_file(ifstream *fileStream,int current_position
 		case FILE_HEADER:
 		{
 			char* file_header = new char[16];
-
 			fileStream->read(file_header, 16);
-
 			fileInfo = BtSnoopFileInfo(file_header);
-
 			delete[] file_header;
 
 			current_position = fileStream->tellg();
-
 			state=PACKET_RECORD;
 		}
 		case PACKET_RECORD:

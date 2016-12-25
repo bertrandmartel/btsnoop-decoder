@@ -1,7 +1,7 @@
 # Bluetooth Snoop File streaming decoder #
 
-[![Build Status](https://travis-ci.org/akinaru/btsnoop-decoder.svg?branch=master)](https://travis-ci.org/akinaru/btsnoop-decoder)
-[![Download](https://api.bintray.com/packages/akinaru/generic/btsnoop-decoder/images/download.svg) ](https://bintray.com/akinaru/generic/btsnoop-decoder/_latestVersion)
+[![Build Status](https://travis-ci.org/bertrandmartel/btsnoop-decoder.svg?branch=master)](https://travis-ci.org/bertrandmartel/btsnoop-decoder)
+[![Download](https://api.bintray.com/packages/bertrandmartel/generic/btsnoop-decoder/images/download.svg) ](https://bintray.com/bertrandmartel/generic/btsnoop-decoder/_latestVersion)
 [![License](http://img.shields.io/:license-mit-blue.svg)](LICENSE.md)
 
 Small library to decode Bluetooth Snoop file used to store radio packet records
@@ -15,7 +15,7 @@ Note : this library doesnt decode HCI Bluetooth data, only snoop-like format
 
 ## Documentation
 
-http://akinaru.github.io/btsnoop-decoder
+http://bertrandmartel.github.io/btsnoop-decoder
 
 ## Build
 
@@ -204,7 +204,7 @@ else{
 An Android Makefile is provided for easy Android integration. Simply add the git repository as a submodule in your `jni` directory :
 
 ```
-git submodule add git://github.com/akinaru/btsnoop-decoder.git <yourproject/src/main/jni/btsnoop-decoder>
+git submodule add git://github.com/bertrandmartel/btsnoop-decoder.git <yourproject/src/main/jni/btsnoop-decoder>
 ```
 
 In you `Application.mk` add gnustl support :
@@ -221,7 +221,7 @@ LOCAL_C_INCLUDES := $NDK/sources/cxx-stl/gnu-libstdc++/4.8/include
 
 ##Examples
 
-[From test project in main.cpp](https://github.com/akinaru/btsnoop-decoder/blob/master/test/src/main.cpp)
+[From test project in main.cpp](https://github.com/bertrandmartel/btsnoop-decoder/blob/master/test/src/main.cpp)
 
 
 ##Memory checking
